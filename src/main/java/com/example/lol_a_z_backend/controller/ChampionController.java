@@ -46,4 +46,9 @@ public class ChampionController {
 	public Champion getRandomChampionIsNotPlayed(){
 		return service.getRandomChampionIsNotPlayed();
 	}
+
+	@GetMapping("/champions/reset")
+	public List<Champion> resetAllChampions(){
+		return service.resetAllChampions();
+	}
 }

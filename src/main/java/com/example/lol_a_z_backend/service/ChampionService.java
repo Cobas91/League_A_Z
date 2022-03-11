@@ -7,8 +7,10 @@ import org.springframework.data.domain.Example;
 import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.stream.Collectors;
 
 @Service
 @Slf4j
@@ -32,18 +34,26 @@ public class ChampionService {
 	}
 
 	public List<Champion> getChampionsFilteredByAttribute(boolean filteredBy) {
-		ExampleMatcher matcher = ExampleMatcher.matching().withIgnoreNullValues();
-		Example<Champion> toFind = Example.of(Champion.builder().played(filteredBy).build(), matcher);
-		log.info(String.valueOf(toFind));
-		return repo.findAll(toFind);
+		List<Champion> allChamps = repo.findAll();
+		return allChamps.stream().filter(e -> e.isPlayed() == filteredBy).collect(Collectors.toList());
 	}
 
 	public Champion getRandomChampionIsNotPlayed() {
-		Champion champ = new Champion();
-		champ.setPlayed(true);
-		Example<Champion> toFind = Example.of(champ);
-		List<Champion> allChampsToPlay = repo.findAll(toFind);
+		List<Champion> allChamps = repo.findAll();
+		List<Champion> champsPlayable = allChamps.stream().filter(e -> !e.isPlayed()).collect(Collectors.toList());
 		Random rng = new Random();
-		return allChampsToPlay.get(rng.nextInt(allChampsToPlay.size()));
+		return champsPlayable.get(rng.nextInt(champsPlayable.size()));
+	}
+
+	public List<Champion> resetAllChampions() {
+		List<Champion> allChamps = repo.findAll();
+		List<Champion> resetedChamps = new ArrayList<>();
+		for (Champion champ : allChamps) {
+			champ.setPlayed(false);
+			champ.setLoose(0);
+			champ.setWins(0);
+			resetedChamps.add(champ);
+		}
+		return repo.saveAll(resetedChamps);
 	}
 }

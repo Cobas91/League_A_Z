@@ -33,7 +33,17 @@ public class ChampionController {
 
 	@PostMapping("/champions/edit")
 	public void editChampion(@RequestBody Champion champion){
-		log.info("Edit Champion "+ champion);
+		log.info("Edit Champion "+ champion.getName());
 		service.editChampion(champion);
+	}
+
+	@GetMapping("/champions/played/{played}")
+	public List<Champion> getChampionsFilteredByAttribute(@PathVariable boolean played){
+		return service.getChampionsFilteredByAttribute(played);
+	}
+
+	@GetMapping("/champion/random")
+	public Champion getRandomChampionIsNotPlayed(){
+		return service.getRandomChampionIsNotPlayed();
 	}
 }

@@ -9,7 +9,7 @@ import javax.persistence.Lob;
 import java.util.List;
 import java.util.Map;
 
-@Entity @Getter @Setter @ToString @RequiredArgsConstructor public class Champion {
+@Entity @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor @Builder public class Champion {
 	@Id
 	private String id;
 	private int key;

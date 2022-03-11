@@ -1,32 +1,40 @@
-import {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions} from "../service/ChampionService";
+import {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions} from "../service/ChampionService";
 import {useEffect, useState} from "react";
 
 export default function UseChampions() {
-    const [onlyUnplayed, setOnlyUnplayed] = useState(false)
+    const [onlyUnplayable, setOnlyUnplayable] = useState(false)
     const [champs, setChamps] = useState([])
 
-        useEffect(() => {
-            if (onlyUnplayed) {
-                API_getAllUnplayedChampions().then((res)=>{setChamps(res)})
-            } else {
-                API_getAllChamps().then((res)=>{setChamps(res)})
-            }
-        },[]);
+    useEffect(() => {
+        if (onlyUnplayable) {
+            API_getAllUnplayedChampions().then((res) => {
+                setChamps(res)
+            })
+        } else {
+            API_getAllChamps().then((res) => {
+                setChamps(res)
+            })
+        }
+    }, [onlyUnplayable]);
 
 
-
-
-
-
-    const editChamp = (champ)=>{
-        console.log(`Edit Champ ${champ.name}`, champ)
+    const editChamp = (champ) => {
         API_editChampion(champ).then(() => {
             API_getAllChamps().then(res => setChamps(res))
         })
     }
 
+    const editChampSingleCard = (champ) => {
+        API_editChampion(champ).then(() => {
+            API_getAllUnplayedChampions().then(res => setChamps(res))
+        })
+    }
+    const resetAllChampions = ()=>{
+        API_resetAllChampions().then((res) => setChamps(res))
+    }
+
     return {
-        editChamp, champs, setOnlyUnplayed
+        editChamp, champs, setOnlyUnplayable, onlyUnplayable, editChampSingleCard, resetAllChampions
     }
 }
 

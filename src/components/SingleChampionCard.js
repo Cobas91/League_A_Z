@@ -3,7 +3,7 @@ import styled from "styled-components";
 import {MdDoubleArrow} from "react-icons/md";
 
 
-export default function ChampionCard({champ, editChamp}) {
+export default function SingleChampionCard({champ, editChamp}) {
 
 
     const handleCheckBox = (e) => {
@@ -21,6 +21,13 @@ export default function ChampionCard({champ, editChamp}) {
         editChamp(champ)
     }
 
+    const stats = [];
+    if(champ){
+        Object.keys(champ?.stats).forEach(function(key) {
+            stats.push({name:[key], value:champ.stats[key]})
+        });
+    }
+
 
     return (
         <ChampionContainer>
@@ -33,28 +40,51 @@ export default function ChampionCard({champ, editChamp}) {
             </StyledHeader>
             <PlayBox>
                 <StyledHeadline>Gespielt</StyledHeadline>
-                <StyledCheckbox type="checkbox" onChange={handleCheckBox} checked={champ?.played}/>
+                <StyledCheckbox type="checkbox" onClick={handleCheckBox} defaultChecked={champ?.played}/>
             </PlayBox>
             <Statistics>
                 <LooseContainer>
                     <StyledHeadline>
                         Looses
                     </StyledHeadline>
-
                     <ArrowContainer>
                         <StyledHeadline>{champ?.loose}</StyledHeadline>
                         <div>
                             <ArrowUp onClick={handleLooseArrowUp}/>
                             <ArrowDown onClick={handleLooseArrowDown}/>
                         </div>
-
                     </ArrowContainer>
-
                 </LooseContainer>
+                <StatContainer>
+                    {stats?.map(item => {
+                        return (
+                            <StatRow>
+                                <StyledStatLabel>{item.name}</StyledStatLabel>
+                                <StyledStatLabel>{item.value}</StyledStatLabel>
+                            </StatRow>
+
+                        )
+                    })}
+                </StatContainer>
             </Statistics>
         </ChampionContainer>
     )
 }
+const StatRow = styled.section`
+    display: flex;
+  justify-content: space-between;
+`
+
+const StyledStatLabel = styled.label`
+  width: 15vw;
+`
+const StatContainer = styled.section`
+    display: flex;
+  align-items: center;
+  flex-direction: column;
+  width: 50vw;
+  text-align: right;
+`
 
 const ArrowContainer = styled.section`
   align-items: center;
@@ -80,7 +110,6 @@ const ArrowDown = styled(MdDoubleArrow)`
 const StyledCheckbox = styled.input`
   height: 20px;
   width: 20px;
-  cursor: pointer;
 `
 
 const PlayBox = styled.section`
@@ -98,7 +127,7 @@ const StyledHeadline = styled.label`
 const LooseContainer = styled.section`
   border: black 1px solid;
   height: clamp(150px, 100%, 400px);
-  width: clamp(150px, 100%, 400px);
+  width: 50vw;
   padding: 5px;
   display: grid;
   grid-template-rows: 40px 1fr;
@@ -106,7 +135,7 @@ const LooseContainer = styled.section`
 
 const Statistics = styled.section`
   margin-top: 50px;
-  height: 100px;
+  height: 5vh;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -115,8 +144,8 @@ const Statistics = styled.section`
 
 const ChampionContainer = styled.section`
   background-color: #5d5c5c;
-  width: 400px;
-  height: 400px;
+  width: 50vw;
+  height: 70vh;
   margin: 30px;
   padding: 10px;
   border-radius: 10px;

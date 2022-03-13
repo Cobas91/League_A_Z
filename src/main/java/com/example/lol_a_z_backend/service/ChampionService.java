@@ -3,13 +3,11 @@ package com.example.lol_a_z_backend.service;
 import com.example.lol_a_z_backend.model.Champion;
 import com.example.lol_a_z_backend.repository.ChampionRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Example;
-import org.springframework.data.domain.ExampleMatcher;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Random;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,7 +24,9 @@ public class ChampionService {
 	}
 
 	public List<Champion> getAllChampions() {
-		return repo.findAll();
+		List<Champion> allChamps = repo.findAll();
+		allChamps.sort(Champion.Comparators.NAME);
+		return allChamps;
 	}
 
 	public void editChampion(Champion champion) {
@@ -35,14 +35,16 @@ public class ChampionService {
 
 	public List<Champion> getChampionsFilteredByAttribute(boolean filteredBy) {
 		List<Champion> allChamps = repo.findAll();
+		allChamps.sort(Champion.Comparators.NAME);
 		return allChamps.stream().filter(e -> e.isPlayed() == filteredBy).collect(Collectors.toList());
 	}
+
 
 	public Champion getRandomChampionIsNotPlayed() {
 		List<Champion> allChamps = repo.findAll();
 		List<Champion> champsPlayable = allChamps.stream().filter(e -> !e.isPlayed()).collect(Collectors.toList());
-		Random rng = new Random();
-		return champsPlayable.get(rng.nextInt(champsPlayable.size()));
+		Collections.shuffle(champsPlayable);
+		return champsPlayable.get(0);
 	}
 
 	public List<Champion> resetAllChampions() {

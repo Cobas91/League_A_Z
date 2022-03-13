@@ -6,6 +6,7 @@ import javax.persistence.ElementCollection;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Lob;
+import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -25,5 +26,11 @@ import java.util.Map;
 	private boolean played;
 	private int wins;
 	private int loose;
+
+	public static class Comparators {
+
+		public static Comparator<Champion> NAME = Comparator.comparing(o -> o.name);
+
+	}
 
 }

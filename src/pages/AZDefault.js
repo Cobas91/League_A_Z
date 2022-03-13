@@ -1,6 +1,6 @@
 import * as React from 'react';
 import ChampionCard from "../components/ChampionCard";
-import styled from "styled-components";
+import styled from "styled-components/macro";
 
 export default function AzDefault({editChamp, champs}) {
 

@@ -1,32 +1,40 @@
 import axios from 'axios'
+import {createHeader} from "../utils/loginHelper";
 
 const API_editChampion = (champ) => {
     return axios
-        .post('http://localhost:8080/api/champions/edit', champ)
+        .post('/api/champions/edit', champ, createHeader(localStorage.getItem('JWT')))
         .then(response => response.data)
         .catch(err => console.error(err))
 }
 
 const API_getAllChamps = () => {
     return axios
-        .get('http://localhost:8080/api/champions')
+        .get('/api/champions', createHeader(localStorage.getItem('JWT')))
         .then(response => response.data)
         .catch(err => console.error(err))
 }
 
 const API_getAllUnplayedChampions = () => {
     return axios
-        .get('http://localhost:8080/api/champions/played/false')
+        .get('/api/champions/played/false', createHeader(localStorage.getItem('JWT')))
         .then(response => response.data)
         .catch(err => console.error(err))
 }
 
 const API_resetAllChampions = ()=>{
     return axios
-        .get('http://localhost:8080/api/champions/reset')
+        .get('/api/champions/reset', createHeader(localStorage.getItem('JWT')))
+        .then(response => response.data)
+        .catch(err => console.error(err))
+}
+
+const API_getRandomChamp = ()=>{
+    return axios
+        .get('/api/champion/random', createHeader(localStorage.getItem('JWT')))
         .then(response => response.data)
         .catch(err => console.error(err))
 }
 
 
-export {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions}
+export {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions, API_getRandomChamp}

@@ -1,10 +1,11 @@
-import {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions} from "../service/ChampionService";
+import {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions, API_getRandomChamp} from "../service/ChampionService";
 import {useEffect, useState} from "react";
 
 export default function UseChampions() {
     const [onlyUnplayable, setOnlyUnplayable] = useState(false)
     const [champs, setChamps] = useState([])
-
+    const [randomChamp, setRandomChamp] = useState([])
+    //TODO useChampion in useChampion, useRandomChampion und useSingleChamion aufspalten
     useEffect(() => {
         if (onlyUnplayable) {
             API_getAllUnplayedChampions().then((res) => {
@@ -17,6 +18,16 @@ export default function UseChampions() {
         }
     }, [onlyUnplayable]);
 
+    useEffect(() => {
+        getRandomChamp();
+    }, []);
+
+
+    const getRandomChamp = ()=>{
+        API_getRandomChamp().then((res) => {
+            setRandomChamp(res)
+        })
+    }
 
     const editChamp = (champ) => {
         API_editChampion(champ).then(() => {
@@ -29,12 +40,18 @@ export default function UseChampions() {
             API_getAllUnplayedChampions().then(res => setChamps(res))
         })
     }
+
+    const editRandomChamp = (champ)=>{
+        API_editChampion(champ).then(() => {
+            getRandomChamp()
+        })
+    }
     const resetAllChampions = ()=>{
         API_resetAllChampions().then((res) => setChamps(res))
     }
 
     return {
-        editChamp, champs, setOnlyUnplayable, onlyUnplayable, editChampSingleCard, resetAllChampions
+        editChamp, champs, setOnlyUnplayable, onlyUnplayable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, editRandomChamp
     }
 }
 

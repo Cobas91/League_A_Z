@@ -1,9 +1,9 @@
 import * as React from 'react';
-import styled from "styled-components";
+import styled from "styled-components/macro";
 import {MdDoubleArrow} from "react-icons/md";
 
 
-export default function SingleChampionCard({champ, editChamp}) {
+export default function ChampionCardWithStats({champ, editChamp}) {
 
 
     const handleCheckBox = (e) => {
@@ -58,7 +58,7 @@ export default function SingleChampionCard({champ, editChamp}) {
                 <StatContainer>
                     {stats?.map(item => {
                         return (
-                            <StatRow>
+                            <StatRow key={Math.random()}>
                                 <StyledStatLabel>{item.name}</StyledStatLabel>
                                 <StyledStatLabel>{item.value}</StyledStatLabel>
                             </StatRow>
@@ -114,8 +114,8 @@ const StyledCheckbox = styled.input`
 
 const PlayBox = styled.section`
   margin-top: 20px;
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 150px 1fr;
   align-items: center;
 `
 
@@ -126,7 +126,7 @@ const StyledHeadline = styled.label`
 
 const LooseContainer = styled.section`
   border: black 1px solid;
-  height: clamp(150px, 100%, 400px);
+  height: clamp(150px, 60vh, 400px);
   width: 50vw;
   padding: 5px;
   display: grid;
@@ -156,8 +156,8 @@ const StyledImage = styled.img`
 `
 
 const StyledHeader = styled.section`
-  display: flex;
-  justify-content: space-evenly;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
   align-items: center;
 `
 

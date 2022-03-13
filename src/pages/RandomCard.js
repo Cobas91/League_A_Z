@@ -1,16 +1,16 @@
 import * as React from 'react';
-import ChampionCardWithStats from "../components/ChampionCardWithStats";
 import {useEffect} from "react";
 import styled from "styled-components/macro";
+import ChampionCardRandom from "../components/ChampionCardRandom";
 
-export default function SingleCard({champs, editChamp, setOnlyUnplayable, onlyUnplayable}) {
+export default function RandomCard({champ, editChamp, getRandomChamp}) {
     useEffect(() => {
-        setOnlyUnplayable(true)
+        getRandomChamp()
     }, []);
 
     return (
         <SingleCardContainer>
-            <ChampionCardWithStats champ={champs[0]} key={champs[0]?.id} editChamp={editChamp}/>
+            <ChampionCardRandom champ={champ} key={champ?.id} getRandomChamp={getRandomChamp}/>
         </SingleCardContainer>
     )
 }

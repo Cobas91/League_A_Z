@@ -5,7 +5,7 @@ import lombok.Data;
 
 import java.util.Map;
 
-@Data public class ApiResponse {
+@Data public class RiotApiResponse {
 	private String type;
 	private String format;
 	private String version;

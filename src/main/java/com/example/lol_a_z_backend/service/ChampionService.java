@@ -16,7 +16,6 @@ import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Slf4j public class ChampionService {
@@ -26,15 +25,10 @@ import java.util.stream.Collectors;
 	public ChampionService(ChampionRepo repo, RiotApiService riotApiService) {
 		this.repo = repo;
 		this.riotApiService = riotApiService;
-		log.info(String.valueOf(repo.findAll().size()));
+
 		if (repo.findAll().isEmpty()) {
 			getNewChampionsFromRiotApi();
 		}
-	}
-
-	private boolean checkByteArrayIsPresent(String champId) {
-		Optional<Champion> optChamp = repo.findById(champId);
-		return optChamp.filter(champion -> champion.getIconByteArray() == null).isPresent();
 	}
 
 	public List<Champion> getAllChampions() {
@@ -47,12 +41,14 @@ import java.util.stream.Collectors;
 		repo.save(champion);
 	}
 
+	//TODO Methode in Repo auslagern und via Repositoy funktionalität umsetzen
 	public List<Champion> getChampionsFilteredByAttribute(boolean filteredBy) {
 		List<Champion> allChamps = repo.findAll();
 		allChamps.sort(Champion.Comparators.NAME);
 		return allChamps.stream().filter(e -> e.isPlayed() == filteredBy).collect(Collectors.toList());
 	}
 
+	//TODO Methode in Repo auslagern und via Repositoy funktionalität umsetzen
 	public Champion getRandomChampionIsNotPlayed() {
 		List<Champion> allChamps = repo.findAll();
 		List<Champion> champsPlayable = allChamps.stream().filter(e -> !e.isPlayed()).collect(Collectors.toList());
@@ -72,31 +68,61 @@ import java.util.stream.Collectors;
 		return repo.saveAll(resetedChamps);
 	}
 
-	public Champion getChampionById(String id) {
-		Optional<Champion> optChamp = repo.findById(id);
-		return optChamp.orElse(null);
-	}
-
+	/**
+	 * Download the Icon from the RIOT Api Page and calculate the Base64 byte array.
+	 * Setting this icon as jpg to the Champion
+	 *
+	 * @param champ
+	 * @return {@link Champion}
+	 */
 	public Champion setIconByteArray(Champion champ) {
 		try {
 			log.info("Generating IconByteArray for: " + champ.getId());
-			URL imageUrl = new URL("https://ddragon.leagueoflegends.com/cdn/12.5.1/img/champion/" + champ.getId() + ".png");
-			BufferedImage image = ImageIO.read(imageUrl);
-			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-			ImageIO.write(image, "jpg", byteArrayOutputStream);
-			byteArrayOutputStream.flush();
+			byte[] imageByteArray = getByteArrayForImage(downloadChampionIcon(champ));
 			String fileName = champ.getId() + ".jpg";
 			String imageType = "image/jpg";
-			MultipartFile multipartFile = new MockMultipartFile(fileName, fileName, imageType, byteArrayOutputStream.toByteArray());
-			byteArrayOutputStream.close();
+
+			MultipartFile multipartFile = new MockMultipartFile(fileName, fileName, imageType, imageByteArray);
 			champ.setIconByteArray(multipartFile.getBytes());
 			return champ;
 		} catch (IOException e) {
 			log.error("Cant set Byte Array for " + champ.getId() + " " + e.getMessage(), e);
+			return null;
 		}
-		return new Champion();
 	}
 
+	/**
+	 * Helper function for {@link #setIconByteArray(Champion)}
+	 *
+	 * @param image
+	 * @return Base64 Byte Array
+	 * @throws IOException
+	 */
+	private byte[] getByteArrayForImage(BufferedImage image) throws IOException {
+		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+		ImageIO.write(image, "jpg", byteArrayOutputStream);
+		byteArrayOutputStream.flush();
+		byteArrayOutputStream.close();
+		return byteArrayOutputStream.toByteArray();
+	}
+
+	/**
+	 * Helper method for {@link #setIconByteArray(Champion)}
+	 *
+	 * @param champ
+	 * @return
+	 * @throws IOException
+	 */
+	private BufferedImage downloadChampionIcon(Champion champ) throws IOException {
+		URL imageUrl = new URL("https://ddragon.leagueoflegends.com/cdn/12.5.1/img/champion/" + champ.getId() + ".png");
+		return ImageIO.read(imageUrl);
+	}
+
+	/**
+	 * Uses the Service to fetch Champions and set the Base64 Icons
+	 *
+	 * @return List of Champions with Icons
+	 */
 	public List<Champion> getNewChampionsFromRiotApi() {
 		List<Champion> allChamps = riotApiService.getChampionsFromApi();
 		List<Champion> allChampsWithImage = new ArrayList<>();

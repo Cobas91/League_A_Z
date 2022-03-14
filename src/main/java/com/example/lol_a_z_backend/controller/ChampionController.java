@@ -43,8 +43,4 @@ public class ChampionController {
 		return service.resetAllChampions();
 	}
 
-	@GetMapping("/champion/patch") public List<Champion> getNewChampionsFromRiotApi() {
-		return service.getNewChampionsFromRiotApi();
-	}
-
 }

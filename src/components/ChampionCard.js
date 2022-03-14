@@ -2,6 +2,8 @@ import * as React from 'react';
 import styled from "styled-components/macro";
 import {MdDoubleArrow} from "react-icons/md";
 
+var base64 = require('base-64');
+
 
 export default function ChampionCard({champ, editChamp}) {
 
@@ -21,11 +23,10 @@ export default function ChampionCard({champ, editChamp}) {
         editChamp(champ)
     }
 
-
     return (
         <ChampionContainer>
             <StyledHeader>
-                <StyledImage src={champ?.icon}/>
+                <StyledImage src={"data:image/jpeg;base64," + champ?.iconByteArray}/>
                 <NameTitleContainer>
                     <Name>{champ?.name}</Name>
                     <Title>{champ?.title}</Title>

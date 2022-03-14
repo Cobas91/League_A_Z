@@ -1,29 +1,32 @@
 import * as React from 'react';
+import {useContext, useEffect, useState} from 'react';
 import styled from "styled-components/macro";
-import {useContext, useEffect, useState} from "react";
 import {API_handleLogin} from "../service/AuthService";
 import {useNavigate} from "react-router-dom";
-import { AuthContext } from '../security/AuthProvider'
+import {AuthContext} from '../security/AuthProvider'
+
 export default function Login() {
     const [credentials, setCredentials] = useState();
     const [_JWT, _setJWT] = useState("");
+    const {setJWT} = useContext(AuthContext)
     useEffect(() => {
         setJWT(_JWT)
-    }, [_JWT]);
-
-    const { setJWT } = useContext(AuthContext)
+    }, [_JWT, setJWT]);
     const navigate = useNavigate();
-    const handleTextInput = (e)=>{
-        setCredentials({...credentials, [e.target.id]:e.target.value})
+    const handleTextInput = (e) => {
+        setCredentials({...credentials, [e.target.id]: e.target.value})
     }
-    const handleLogin = (e)=>{
+    const handleLogin = (e) => {
         e.preventDefault();
         API_handleLogin(credentials)
-            .then((res)=>{res ? _setJWT(res): console.log("No valid JWT")})
-            .then(()=>{
-                setTimeout(() => {
-                navigate("/")
-            }, 1);}
+            .then((res) => {
+                res ? _setJWT(res) : console.log("No valid JWT")
+            })
+            .then(() => {
+                    setTimeout(() => {
+                        navigate("/")
+                    }, 500);
+                }
             )
     }
     const handleRegister = (e)=>{

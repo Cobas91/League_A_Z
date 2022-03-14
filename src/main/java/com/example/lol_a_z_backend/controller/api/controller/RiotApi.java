@@ -1,6 +1,7 @@
-package com.example.lol_a_z_backend.controller.api.model;
+package com.example.lol_a_z_backend.controller.api.controller;
 
 import com.example.lol_a_z_backend.controller.api.exception.RiotApiGetChampionException;
+import com.example.lol_a_z_backend.controller.api.model.ApiResponse;
 import com.example.lol_a_z_backend.model.Champion;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;

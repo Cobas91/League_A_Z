@@ -1,7 +1,6 @@
 package com.example.lol_a_z_backend.service;
 
-import com.example.lol_a_z_backend.controller.api.exception.RiotApiGetChampionException;
-import com.example.lol_a_z_backend.controller.api.model.RiotApi;
+import com.example.lol_a_z_backend.controller.api.service.RiotApiService;
 import com.example.lol_a_z_backend.model.Champion;
 import com.example.lol_a_z_backend.repository.ChampionRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -22,11 +21,11 @@ import java.util.stream.Collectors;
 
 @Service @Slf4j public class ChampionService {
 	ChampionRepo repo;
-	RiotApi riotApi;
+	RiotApiService riotApiService;
 
-	public ChampionService(ChampionRepo repo, RiotApi riotApi) {
+	public ChampionService(ChampionRepo repo, RiotApiService riotApiService) {
 		this.repo = repo;
-		this.riotApi = riotApi;
+		this.riotApiService = riotApiService;
 		log.info(String.valueOf(repo.findAll().size()));
 		if (repo.findAll().isEmpty()) {
 			getNewChampionsFromRiotApi();
@@ -53,7 +52,6 @@ import java.util.stream.Collectors;
 		allChamps.sort(Champion.Comparators.NAME);
 		return allChamps.stream().filter(e -> e.isPlayed() == filteredBy).collect(Collectors.toList());
 	}
-
 
 	public Champion getRandomChampionIsNotPlayed() {
 		List<Champion> allChamps = repo.findAll();
@@ -100,18 +98,12 @@ import java.util.stream.Collectors;
 	}
 
 	public List<Champion> getNewChampionsFromRiotApi() {
-		try {
-			List<Champion> allChamps = riotApi.getAllChampions();
-			List<Champion> allChampsWithImage = new ArrayList<>();
-			for (Champion champ : allChamps) {
-				allChampsWithImage.add(setIconByteArray(champ));
-			}
-
-			return repo.saveAll(allChampsWithImage);
-		} catch (RiotApiGetChampionException e) {
-			log.error("Error while fetching Data from Riot API" + e.getMessage(), e);
-			return List.of();
+		List<Champion> allChamps = riotApiService.getChampionsFromApi();
+		List<Champion> allChampsWithImage = new ArrayList<>();
+		for (Champion champ : allChamps) {
+			allChampsWithImage.add(setIconByteArray(champ));
 		}
+		return repo.saveAll(allChampsWithImage);
 
 	}
 }

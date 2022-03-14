@@ -27,6 +27,10 @@ import java.util.stream.Collectors;
 	public ChampionService(ChampionRepo repo, RiotApi riotApi) {
 		this.repo = repo;
 		this.riotApi = riotApi;
+		log.info(String.valueOf(repo.findAll().size()));
+		if (repo.findAll().isEmpty()) {
+			getNewChampionsFromRiotApi();
+		}
 	}
 
 	private boolean checkByteArrayIsPresent(String champId) {

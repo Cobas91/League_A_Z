@@ -1,26 +1,37 @@
 package com.example.lol_a_z_backend.service;
 
+import com.example.lol_a_z_backend.controller.api.exception.RiotApiGetChampionException;
+import com.example.lol_a_z_backend.controller.api.model.RiotApi;
 import com.example.lol_a_z_backend.model.Champion;
 import com.example.lol_a_z_backend.repository.ChampionRepo;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
+import javax.imageio.ImageIO;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
-@Service
-@Slf4j
-public class ChampionService {
+@Service @Slf4j public class ChampionService {
 	ChampionRepo repo;
+	RiotApi riotApi;
 
-	public ChampionService(ChampionRepo repo) {
+	public ChampionService(ChampionRepo repo, RiotApi riotApi) {
 		this.repo = repo;
+		this.riotApi = riotApi;
 	}
 
-	public void addListOfChampions(List<Champion> champs){
-		repo.saveAll(champs);
+	private boolean checkByteArrayIsPresent(String champId) {
+		Optional<Champion> optChamp = repo.findById(champId);
+		return optChamp.filter(champion -> champion.getIconByteArray() == null).isPresent();
 	}
 
 	public List<Champion> getAllChampions() {
@@ -57,5 +68,46 @@ public class ChampionService {
 			resetedChamps.add(champ);
 		}
 		return repo.saveAll(resetedChamps);
+	}
+
+	public Champion getChampionById(String id) {
+		Optional<Champion> optChamp = repo.findById(id);
+		return optChamp.orElse(null);
+	}
+
+	public Champion setIconByteArray(Champion champ) {
+		try {
+			log.info("Generating IconByteArray for: " + champ.getId());
+			URL imageUrl = new URL("https://ddragon.leagueoflegends.com/cdn/12.5.1/img/champion/" + champ.getId() + ".png");
+			BufferedImage image = ImageIO.read(imageUrl);
+			ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+			ImageIO.write(image, "jpg", byteArrayOutputStream);
+			byteArrayOutputStream.flush();
+			String fileName = champ.getId() + ".jpg";
+			String imageType = "image/jpg";
+			MultipartFile multipartFile = new MockMultipartFile(fileName, fileName, imageType, byteArrayOutputStream.toByteArray());
+			byteArrayOutputStream.close();
+			champ.setIconByteArray(multipartFile.getBytes());
+			return champ;
+		} catch (IOException e) {
+			log.error("Cant set Byte Array for " + champ.getId() + " " + e.getMessage(), e);
+		}
+		return new Champion();
+	}
+
+	public List<Champion> getNewChampionsFromRiotApi() {
+		try {
+			List<Champion> allChamps = riotApi.getAllChampions();
+			List<Champion> allChampsWithImage = new ArrayList<>();
+			for (Champion champ : allChamps) {
+				allChampsWithImage.add(setIconByteArray(champ));
+			}
+
+			return repo.saveAll(allChampsWithImage);
+		} catch (RiotApiGetChampionException e) {
+			log.error("Error while fetching Data from Riot API" + e.getMessage(), e);
+			return List.of();
+		}
+
 	}
 }

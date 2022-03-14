@@ -18,13 +18,6 @@ public class ChampionController {
 		this.service = service;
 	}
 
-	@PostMapping("/champions")
-	public void addListOfChampions(@RequestBody List<Champion> champions){
-		service.addListOfChampions(champions);
-		log.info("Add List of Champions "+ champions);
-	}
-
-
 	@GetMapping("/champions")
 	public List<Champion> getAllChampions(){
 		log.info("Got Request for all Champions");
@@ -42,13 +35,16 @@ public class ChampionController {
 		return service.getChampionsFilteredByAttribute(played);
 	}
 
-	@GetMapping("/champion/random")
-	public Champion getRandomChampionIsNotPlayed(){
+	@GetMapping("/champion/random") public Champion getRandomChampionIsNotPlayed() {
 		return service.getRandomChampionIsNotPlayed();
 	}
 
-	@GetMapping("/champions/reset")
-	public List<Champion> resetAllChampions(){
+	@GetMapping("/champions/reset") public List<Champion> resetAllChampions() {
 		return service.resetAllChampions();
 	}
+
+	@GetMapping("/champion/patch") public List<Champion> getNewChampionsFromRiotApi() {
+		return service.getNewChampionsFromRiotApi();
+	}
+
 }

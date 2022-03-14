@@ -11,18 +11,15 @@ import java.util.List;
 import java.util.Map;
 
 @Entity @Getter @Setter @ToString @AllArgsConstructor @NoArgsConstructor @Builder public class Champion {
-	@Id
-	private String id;
+	@Id private String id;
 	private int key;
 	private String name;
 	private String title;
-	@ElementCollection
-	private List<String> tags;
-	@ElementCollection
-	private Map<String, Integer> stats;
+	@ElementCollection private List<String> tags;
+	@ElementCollection private Map<String, Integer> stats;
 	private String icon;
-	@Lob
-	private String description;
+	@Lob private byte[] iconByteArray;
+	@Lob private String description;
 	private boolean played;
 	private int wins;
 	private int loose;

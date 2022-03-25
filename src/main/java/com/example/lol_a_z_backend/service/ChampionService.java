@@ -3,42 +3,53 @@ package com.example.lol_a_z_backend.service;
 import com.example.lol_a_z_backend.controller.api.service.RiotApiService;
 import com.example.lol_a_z_backend.model.Champion;
 import com.example.lol_a_z_backend.repository.ChampionRepo;
+import com.example.lol_a_z_backend.security.model.Summoner;
+import com.example.lol_a_z_backend.security.repo.SummonerRepo;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-import org.springframework.web.multipart.MultipartFile;
 
-import javax.imageio.ImageIO;
-import java.awt.image.BufferedImage;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Slf4j public class ChampionService {
 	ChampionRepo repo;
 	RiotApiService riotApiService;
+	SummonerRepo userRepo;
+	InitialChampionService initialChampionService;
 
-	public ChampionService(ChampionRepo repo, RiotApiService riotApiService) {
+	public ChampionService(ChampionRepo repo, RiotApiService riotApiService, SummonerRepo userRepo, InitialChampionService initialChampionService) {
 		this.repo = repo;
 		this.riotApiService = riotApiService;
+		this.userRepo = userRepo;
+		this.initialChampionService = initialChampionService;
+	}
 
-		if (repo.findAll().isEmpty()) {
-			getNewChampionsFromRiotApi();
-		}
+	public List<Champion> getDefaultChamps() {
+		return initialChampionService.getDefaultChampions();
 	}
 
 	public List<Champion> getAllChampions() {
-		List<Champion> allChamps = repo.findAll();
-		allChamps.sort(Champion.Comparators.NAME);
-		return allChamps;
+		Optional<Summoner> summoner = userRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+		if (summoner.isPresent()) {
+			List<Champion> champs = repo.findAllBySummonerId(summoner.get().getId());
+			champs.sort(Champion.Comparators.NAME);
+			return champs;
+		}
+		return List.of();
 	}
 
 	public void editChampion(Champion champion) {
-		repo.save(champion);
+		Optional<Summoner> summoner = userRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
+		if (summoner.isPresent()) {
+			List<Champion> userChamps = summoner.get().getChampions();
+			champion.setSummoner(summoner.get());
+			userChamps.set(userChamps.indexOf(champion), champion);
+			userRepo.save(summoner.get());
+		}
 	}
 
 	//TODO Methode in Repo auslagern und via Repositoy funktionalität umsetzen
@@ -68,68 +79,8 @@ import java.util.stream.Collectors;
 		return repo.saveAll(resetedChamps);
 	}
 
-	/**
-	 * Download the Icon from the RIOT Api Page and calculate the Base64 byte array.
-	 * Setting this icon as jpg to the Champion
-	 *
-	 * @param champ
-	 * @return {@link Champion}
-	 */
-	public Champion setIconByteArray(Champion champ) {
-		try {
-			log.info("Generating IconByteArray for: " + champ.getId());
-			byte[] imageByteArray = getByteArrayForImage(downloadChampionIcon(champ));
-			String fileName = champ.getId() + ".jpg";
-			String imageType = "image/jpg";
-
-			MultipartFile multipartFile = new MockMultipartFile(fileName, fileName, imageType, imageByteArray);
-			champ.setIconByteArray(multipartFile.getBytes());
-			return champ;
-		} catch (IOException e) {
-			log.error("Cant set Byte Array for " + champ.getId() + " " + e.getMessage(), e);
-			return null;
-		}
+	public void saveListOfChamps(List<Champion> champs) {
+		repo.saveAll(champs);
 	}
 
-	/**
-	 * Helper function for {@link #setIconByteArray(Champion)}
-	 *
-	 * @param image
-	 * @return Base64 Byte Array
-	 * @throws IOException
-	 */
-	private byte[] getByteArrayForImage(BufferedImage image) throws IOException {
-		ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
-		ImageIO.write(image, "jpg", byteArrayOutputStream);
-		byteArrayOutputStream.flush();
-		byteArrayOutputStream.close();
-		return byteArrayOutputStream.toByteArray();
-	}
-
-	/**
-	 * Helper method for {@link #setIconByteArray(Champion)}
-	 *
-	 * @param champ
-	 * @return
-	 * @throws IOException
-	 */
-	private BufferedImage downloadChampionIcon(Champion champ) throws IOException {
-		URL imageUrl = new URL("https://ddragon.leagueoflegends.com/cdn/12.5.1/img/champion/" + champ.getId() + ".png");
-		return ImageIO.read(imageUrl);
-	}
-
-	/**
-	 * Uses the Service to fetch Champions and set the Base64 Icons
-	 *
-	 * @return List of Champions with Icons
-	 */
-	public List<Champion> getNewChampionsFromRiotApi() {
-		List<Champion> allChamps = riotApiService.getChampionsFromApi();
-		List<Champion> allChampsWithImage = new ArrayList<>();
-		for (Champion champ : allChamps) {
-			allChampsWithImage.add(setIconByteArray(champ));
-		}
-		return repo.saveAll(allChampsWithImage);
-
-	}
 }

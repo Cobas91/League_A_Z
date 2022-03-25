@@ -1,6 +1,6 @@
 package com.example.lol_a_z_backend.security.config;
 
-import com.example.lol_a_z_backend.security.service.AppUserDetailService;
+import com.example.lol_a_z_backend.security.service.SummonerDetailService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -17,18 +17,17 @@ import javax.servlet.Filter;
 
 @EnableWebSecurity
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
-    private final AppUserDetailService appUserDetailService;
+    private final SummonerDetailService summonerDetailService;
     private final Filter jwtAuthFilter;
 
-    @Autowired
-    public SecurityConfig(AppUserDetailService appUserDetailService, Filter jwtAuthFilter){
-        this.appUserDetailService = appUserDetailService;
+    @Autowired public SecurityConfig(SummonerDetailService summonerDetailService, Filter jwtAuthFilter) {
+        this.summonerDetailService = summonerDetailService;
         this.jwtAuthFilter = jwtAuthFilter;
     }
 
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
-        auth.userDetailsService(appUserDetailService);
+        auth.userDetailsService(summonerDetailService);
     }
 
     @Override

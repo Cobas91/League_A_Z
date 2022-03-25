@@ -39,8 +39,10 @@ public class JwtAuthFilter extends OncePerRequestFilter {
     }
 
     private void setSecurityContext(String username) {
+        // Hier kann weiterer Context gespeichert werden. Eigene Implimentierung von Authentication Klasse schreiben. DOrt gewünschte Infos in details speichern.
         UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(username, "", List.of());
         SecurityContextHolder.getContext().setAuthentication(authToken);
+
     }
 
     private String getAuthToken(HttpServletRequest request) {

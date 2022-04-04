@@ -3,6 +3,7 @@ package com.example.lol_a_z_backend.service;
 import com.example.lol_a_z_backend.controller.api.service.RiotApiService;
 import com.example.lol_a_z_backend.model.Champion;
 import com.example.lol_a_z_backend.repository.ChampionRepo;
+import com.example.lol_a_z_backend.security.exception.SummonerNotExistException;
 import com.example.lol_a_z_backend.security.model.Summoner;
 import com.example.lol_a_z_backend.security.repo.SummonerRepo;
 import lombok.extern.slf4j.Slf4j;
@@ -13,7 +14,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 @Service @Slf4j public class ChampionService {
 	ChampionRepo repo;
@@ -28,47 +28,50 @@ import java.util.stream.Collectors;
 		this.initialChampionService = initialChampionService;
 	}
 
+	private Summoner getSummoner() {
+		String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
+		Optional<Summoner> summoner = userRepo.findByUsername(username);
+		if (summoner.isPresent()) {
+			return summoner.get();
+		} else {
+			throw new SummonerNotExistException("Could not find User " + username);
+		}
+
+	}
+
 	public List<Champion> getDefaultChamps() {
 		return initialChampionService.getDefaultChampions();
 	}
 
 	public List<Champion> getAllChampions() {
-		Optional<Summoner> summoner = userRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-		if (summoner.isPresent()) {
-			List<Champion> champs = repo.findAllBySummonerId(summoner.get().getId());
-			champs.sort(Champion.Comparators.NAME);
-			return champs;
-		}
-		return List.of();
+		Summoner summoner = getSummoner();
+		List<Champion> champs = repo.findAllBySummonerId(summoner.getId());
+		champs.sort(Champion.Comparators.NAME);
+		return champs;
 	}
 
 	public void editChampion(Champion champion) {
-		Optional<Summoner> summoner = userRepo.findByUsername(SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
-		if (summoner.isPresent()) {
-			List<Champion> userChamps = summoner.get().getChampions();
-			champion.setSummoner(summoner.get());
-			userChamps.set(userChamps.indexOf(champion), champion);
-			userRepo.save(summoner.get());
-		}
+		Summoner summoner = getSummoner();
+		List<Champion> userChamps = summoner.getChampions();
+		champion.setSummoner(summoner);
+		userChamps.set(userChamps.indexOf(champion), champion);
+		userRepo.save(summoner);
 	}
 
 	//TODO Methode in Repo auslagern und via Repositoy funktionalität umsetzen
 	public List<Champion> getChampionsFilteredByAttribute(boolean filteredBy) {
-		List<Champion> allChamps = repo.findAll();
-		allChamps.sort(Champion.Comparators.NAME);
-		return allChamps.stream().filter(e -> e.isPlayed() == filteredBy).collect(Collectors.toList());
+		return repo.findAllfindAllByPlayedAndSummonerIdOrderByNameAsc(filteredBy, getSummoner().getId());
 	}
 
 	//TODO Methode in Repo auslagern und via Repositoy funktionalität umsetzen
 	public Champion getRandomChampionIsNotPlayed() {
-		List<Champion> allChamps = repo.findAll();
-		List<Champion> champsPlayable = allChamps.stream().filter(e -> !e.isPlayed()).collect(Collectors.toList());
+		List<Champion> champsPlayable = repo.findAllfindAllByPlayedAndSummonerIdOrderByNameAsc(false, getSummoner().getId());
 		Collections.shuffle(champsPlayable);
 		return champsPlayable.get(0);
 	}
 
 	public List<Champion> resetAllChampions() {
-		List<Champion> allChamps = repo.findAll();
+		List<Champion> allChamps = repo.findAllBySummonerId(getSummoner().getId());
 		List<Champion> resetedChamps = new ArrayList<>();
 		for (Champion champ : allChamps) {
 			champ.setPlayed(false);

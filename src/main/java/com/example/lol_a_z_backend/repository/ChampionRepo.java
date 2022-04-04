@@ -8,4 +8,6 @@ import java.util.List;
 
 @Repository public interface ChampionRepo extends JpaRepository<Champion, String> {
 	List<Champion> findAllBySummonerId(Long summonerId);
+
+	List<Champion> findAllfindAllByPlayedAndSummonerIdOrderByNameAsc(boolean filteredBy, Long summonerId);
 }

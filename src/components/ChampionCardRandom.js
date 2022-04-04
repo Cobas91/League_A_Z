@@ -1,7 +1,6 @@
 import * as React from 'react';
 import styled from "styled-components/macro";
-import {MdDoubleArrow} from "react-icons/md";
-import { AiOutlineReload } from "react-icons/ai";
+import {AiOutlineReload} from "react-icons/ai";
 
 
 export default function ChampionCardRandom({champ, getRandomChamp}) {
@@ -20,7 +19,7 @@ export default function ChampionCardRandom({champ, getRandomChamp}) {
     return (
         <ChampionContainer>
             <StyledHeader>
-                <StyledImage src={champ?.icon}/>
+                <StyledImage src={"data:image/jpeg;base64," + champ?.iconByteArray}/>
                 <NameTitleContainer>
                     <Name>{champ?.name}</Name>
                     <Title>{champ?.title}</Title>

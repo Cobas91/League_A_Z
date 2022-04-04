@@ -1,17 +1,17 @@
 import * as React from 'react';
+import {useContext} from 'react';
 import styled from "styled-components/macro";
 import {Link, useNavigate} from "react-router-dom";
 import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import {FiLogOut} from "react-icons/fi";
-import {useContext} from "react";
 import {AuthContext} from "../security/AuthProvider";
 
-export default function HeadNavBar({onlyUnplayable, setOnlyUnplayable, resetAllChampions}) {
-    const { logout, username } = useContext(AuthContext)
+export default function HeadNavBar({playable, changePlayableFilter, resetAllChampions}) {
+    const {logout, username} = useContext(AuthContext)
     const navigate = useNavigate();
     const handleCheckBox = (e) => {
-        setOnlyUnplayable(!onlyUnplayable)
+        changePlayableFilter(!playable)
     }
     const handleButtonClick = () => {
         confirmAlert({
@@ -41,8 +41,8 @@ export default function HeadNavBar({onlyUnplayable, setOnlyUnplayable, resetAllC
                 <StyledLink to="/randomCard">Random Card</StyledLink>
             </SideNavigation>
             <SortPlayableContainer>
-                <StyledLabel>Nur ungespielte Champions anzeigen</StyledLabel>
-                <StyledCheckbox type="checkbox" onChange={handleCheckBox} checked={onlyUnplayable}/>
+                <StyledLabel>Gespielte Champions anzeigen</StyledLabel>
+                <StyledCheckbox type="checkbox" onChange={handleCheckBox} checked={playable}/>
             </SortPlayableContainer>
             <StyledButton onClick={handleButtonClick}>Alle Champions zurücksetzen</StyledButton>
             <div>

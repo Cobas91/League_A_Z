@@ -1,8 +1,7 @@
 import './App.css';
-import {
-    Routes,
-    Route,
-} from "react-router-dom";
+import {Route, Routes,} from "react-router-dom";
+import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
+import "primereact/resources/primereact.min.css";
 import AzDefault from "./pages/AZDefault";
 import HeadNavBar from "./components/HeadNavBar";
 import * as React from "react";
@@ -11,13 +10,12 @@ import SingleCard from "./pages/SingleCard";
 import styled from "styled-components/macro";
 import RandomCard from "./pages/RandomCard";
 import PrivateRoute from "./security/PrivateRoute";
-import {Fragment} from "react";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
 
 
 function App() {
-    const {editChamp, champs, setOnlyUnplayable, onlyUnplayable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp} = useChampions();
+    const {editChamp, champs, playable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, changePlayableFilter} = useChampions();
     return (
         <Routes>
             <Route path="/login" element={<Login/>}/>
@@ -25,7 +23,7 @@ function App() {
             <Route path="/" element={<PrivateRoute/>}>
                 <Route path="/" element={
                     <>
-                        <HeadNavBar setOnlyUnplayable={setOnlyUnplayable} onlyUnplayable={onlyUnplayable} resetAllChampions={resetAllChampions}/>
+                        <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
                         <Content>
                             <AzDefault editChamp={editChamp} champs={champs}/>
                         </Content>
@@ -35,9 +33,9 @@ function App() {
             <Route path="/" element={<PrivateRoute/>}>
                 <Route path="/singleCard" element={
                     <>
-                        <HeadNavBar setOnlyUnplayable={setOnlyUnplayable} onlyUnplayable={onlyUnplayable} resetAllChampions={resetAllChampions}/>
+                        <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
                         <Content>
-                            <SingleCard champs={champs} editChamp={editChampSingleCard} setOnlyUnplayable={setOnlyUnplayable} onlyUnplayable={onlyUnplayable}/>} />
+                            <SingleCard champs={champs} editChamp={editChampSingleCard} changePlayableFilter={changePlayableFilter} playable={playable}/>} />
                         </Content>
                     </>
                 }/>
@@ -45,7 +43,7 @@ function App() {
             <Route path="/" element={<PrivateRoute/>}>
                 <Route path="/randomCard" element={
                     <>
-                        <HeadNavBar setOnlyUnplayable={setOnlyUnplayable} onlyUnplayable={onlyUnplayable} resetAllChampions={resetAllChampions}/>
+                        <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
                         <Content>
                             <RandomCard champ={randomChamp} getRandomChamp={getRandomChamp}/>
                         </Content>

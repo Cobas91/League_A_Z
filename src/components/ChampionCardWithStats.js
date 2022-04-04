@@ -32,7 +32,7 @@ export default function ChampionCardWithStats({champ, editChamp}) {
     return (
         <ChampionContainer>
             <StyledHeader>
-                <StyledImage src={champ?.icon}/>
+                <StyledImage src={"data:image/jpeg;base64," + champ?.iconByteArray}/>
                 <NameTitleContainer>
                     <Name>{champ?.name}</Name>
                     <Title>{champ?.title}</Title>

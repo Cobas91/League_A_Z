@@ -1,29 +1,31 @@
-import {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions, API_getRandomChamp} from "../service/ChampionService";
+import {API_editChampion, API_getAllChampsFiltered, API_getAllUnplayedChampions, API_getRandomChamp, API_resetAllChampions} from "../service/ChampionService";
 import {useEffect, useState} from "react";
 
 export default function UseChampions() {
-    const [onlyUnplayable, setOnlyUnplayable] = useState(false)
+    const [playable, setPlayable] = useState(false)
     const [champs, setChamps] = useState([])
     const [randomChamp, setRandomChamp] = useState([])
     //TODO useChampion in useChampion, useRandomChampion und useSingleChamion aufspalten
     useEffect(() => {
-        if (onlyUnplayable) {
-            API_getAllUnplayedChampions().then((res) => {
-                setChamps(res)
-            })
-        } else {
-            API_getAllChamps().then((res) => {
-                setChamps(res)
-            })
-        }
-    }, [onlyUnplayable]);
+        API_getAllChampsFiltered(playable).then((res) => {
+            setChamps(res)
+        })
+    }, [playable]);
+
+    const changePlayableFilter = (newState) => {
+        setPlayable(newState)
+        API_getAllChampsFiltered(playable).then((res) => setChamps(res))
+    }
 
     useEffect(() => {
         getRandomChamp();
     }, []);
 
+    const refreshAllChamps = () => {
+        API_getAllChampsFiltered(playable).then((res) => setChamps(res));
+    }
 
-    const getRandomChamp = ()=>{
+    const getRandomChamp = () => {
         API_getRandomChamp().then((res) => {
             setRandomChamp(res)
         })
@@ -31,7 +33,7 @@ export default function UseChampions() {
 
     const editChamp = (champ) => {
         API_editChampion(champ).then(() => {
-            API_getAllChamps().then(res => setChamps(res))
+            API_getAllChampsFiltered(playable).then(res => setChamps(res))
         })
     }
 
@@ -51,7 +53,7 @@ export default function UseChampions() {
     }
 
     return {
-        editChamp, champs, setOnlyUnplayable, onlyUnplayable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, editRandomChamp
+        editChamp, champs, playable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, editRandomChamp, changePlayableFilter, refreshAllChamps
     }
 }
 

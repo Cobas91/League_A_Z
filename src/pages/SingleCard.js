@@ -1,11 +1,11 @@
 import * as React from 'react';
+import {useEffect} from 'react';
 import ChampionCardWithStats from "../components/ChampionCardWithStats";
-import {useEffect} from "react";
 import styled from "styled-components/macro";
 
-export default function SingleCard({champs, editChamp, setOnlyUnplayable, onlyUnplayable}) {
+export default function SingleCard({champs, editChamp, changePlayableFilter}) {
     useEffect(() => {
-        setOnlyUnplayable(true)
+        changePlayableFilter(false)
     }, []);
 
     return (

@@ -4,6 +4,7 @@ import styled from "styled-components/macro";
 import {API_handleLogin} from "../service/AuthService";
 import {useNavigate} from "react-router-dom";
 import {AuthContext} from '../security/AuthProvider'
+import {InputText} from 'primereact/inputtext';
 
 export default function Login() {
     const [credentials, setCredentials] = useState();
@@ -71,8 +72,8 @@ const StyledButton = styled.button`
   }
 `
 
-const StyledInput = styled.input`
-    margin: 5px 0 5px 0;
+const StyledInput = styled(InputText)`
+  margin: 5px 0 5px 0;
   height: 20px;
 `
 

@@ -8,16 +8,15 @@ const API_editChampion = (champ) => {
         .catch(err => console.error(err))
 }
 
-const API_getAllChamps = () => {
-    return axios
-        .get('/api/champions', createHeader(localStorage.getItem('JWT')))
-        .then(response => response.data)
-        .catch(err => console.error(err))
-}
-
 const API_getAllUnplayedChampions = () => {
     return axios
         .get('/api/champions/played/false', createHeader(localStorage.getItem('JWT')))
+        .then(response => response.data)
+        .catch(err => console.error(err))
+}
+const API_getAllChampsFiltered = (played) => {
+    return axios
+        .get('/api/champions/played/' + played, createHeader(localStorage.getItem('JWT')))
         .then(response => response.data)
         .catch(err => console.error(err))
 }
@@ -37,4 +36,4 @@ const API_getRandomChamp = ()=>{
 }
 
 
-export {API_editChampion, API_getAllChamps, API_getAllUnplayedChampions, API_resetAllChampions, API_getRandomChamp}
+export {API_editChampion, API_getAllUnplayedChampions, API_resetAllChampions, API_getRandomChamp, API_getAllChampsFiltered}

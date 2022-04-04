@@ -1,44 +1,57 @@
 import * as React from 'react';
+import {useContext, useState} from 'react';
 import styled from "styled-components/macro";
-import {useContext, useState} from "react";
 import {AuthContext} from "../security/AuthProvider";
 import {API_handleRegister} from "../service/AuthService";
 import {useNavigate} from "react-router-dom";
+import {Captcha} from 'primereact/captcha';
+import {InputText} from 'primereact/inputtext';
+import useChamps from '../hooks/useChampions'
 
 export default function Register() {
     const [credentials, setCredentials] = useState()
     const [repeatedPassword, setRepeatedPassword] = useState();
+    const [noRobot, setNoRobot] = useState(false)
     const navigate = useNavigate();
-    const { setJWT } = useContext(AuthContext)
+    const {setJWT} = useContext(AuthContext)
+    const {refreshAllChamps} = useChamps();
 
-    const handleRegister = (e)=>{
+    const handleRegister = (e) => {
         e.preventDefault()
-        if(repeatedPassword?.password_repeat === credentials?.password){
+        if (repeatedPassword?.password_repeat === credentials?.password && noRobot) {
             API_handleRegister(credentials)
-                .then((res)=>{res ? setJWT(res): setJWT("")})
-                .then(()=>{
-                    setTimeout(() => {
-                        navigate("/")
-                    }, 1000);}
+                .then((res) => {
+                    res ? setJWT(res) : setJWT("")
+                })
+                .then(() => {
+                        setTimeout(() => {
+                            refreshAllChamps()
+                            navigate("/")
+                        }, 1000);
+                    }
                 )
-        }else{
+        } else {
             console.log("No Equal password")
         }
 
     }
-    const handleInput = (e)=>{
+    const handleInput = (e) => {
         setCredentials({...credentials, [e.target.id]: e.target.value})
     }
-    const handleRepeatedPasswordChange = (e)=>{
+    const handleRepeatedPasswordChange = (e) => {
         setRepeatedPassword({...repeatedPassword, [e.target.id]: e.target.value})
+    }
+    const showResponse = (response) => {
+        setNoRobot(true);
     }
     return (
         <RegisterContainer>
             <RegisterForm>
                 <InputContainer>
-                    <StyledInput id="username" placeholder="Username" onChange={handleInput}/>
-                    <StyledInput id="password" placeholder="Password" onChange={handleInput}/>
-                    <StyledInput id="password_repeat" placeholder="Repeat Password" onChange={handleRepeatedPasswordChange}/>
+                    <StyledInput id="username" placeholder="Username" type="username" onChange={handleInput}/>
+                    <StyledInput id="password" placeholder="Password" type="password" onChange={handleInput}/>
+                    <StyledInput id="password_repeat" placeholder="Repeat Password" type="password" onChange={handleRepeatedPasswordChange}/>
+                    <Captcha siteKey="6LeypUYfAAAAAFOsRrWy-CXEbISm8pG4hbXV4cYo" onResponse={showResponse}></Captcha>
                 </InputContainer>
                 <StyledRegisterButton onClick={handleRegister}>Register</StyledRegisterButton>
                 <StyledRegisterButton onClick={()=>navigate("/login")}>Zurück zum Login</StyledRegisterButton>
@@ -74,7 +87,7 @@ const InputContainer = styled.section`
   width: 100%;
 `
 
-const StyledInput = styled.input`
+const StyledInput = styled(InputText)`
   height: 20px;
   margin: 10px;
 `

@@ -2,6 +2,7 @@ package com.example.lol_a_z_backend.service;
 
 import com.example.lol_a_z_backend.controller.api.service.RiotApiService;
 import com.example.lol_a_z_backend.model.Champion;
+import com.example.lol_a_z_backend.util.FileSystemUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
@@ -22,31 +23,26 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.stream.Stream;
 
 @Service @Slf4j public class InitialChampionService {
 	private final RiotApiService riotApiService;
 	private final Path jsonFilePath = Paths.get("./data/champs/");
+	private final FileSystemUtil fileSystemUtil;
 
-	public InitialChampionService(RiotApiService riotApiService) {
+	public InitialChampionService(RiotApiService riotApiService, FileSystemUtil fileSystemUtil) {
 		this.riotApiService = riotApiService;
+		this.fileSystemUtil = fileSystemUtil;
 		try {
-			if (directoryIsEmpty(jsonFilePath)) {
+			if (!Files.exists(jsonFilePath)) {
+				if (fileSystemUtil.createDirectory(jsonFilePath.toString())) {
+					downloadInitialChamps();
+				}
+			} else if (fileSystemUtil.directoryIsEmpty(jsonFilePath)) {
 				downloadInitialChamps();
 			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		}
-	}
-
-	public boolean directoryIsEmpty(Path path) throws IOException {
-		if (Files.isDirectory(path)) {
-			try (Stream<Path> entries = Files.list(path)) {
-				return entries.findFirst().isEmpty();
-			}
-		}
-
-		return false;
 	}
 
 	private void downloadInitialChamps() {
@@ -56,6 +52,7 @@ import java.util.stream.Stream;
 				FileWriter file = new FileWriter(jsonFilePath + "/" + champ.getName() + ".json");
 				Gson gson = new Gson();
 				String json = gson.toJson(setIconByteArray(champ));
+				log.info("Writing champion to file: " + champ.getId());
 				file.write(json);
 				file.flush();
 			} catch (IOException e) {
@@ -69,7 +66,6 @@ import java.util.stream.Stream;
 		ObjectMapper mapper = new ObjectMapper();
 		List<Champion> champs = new ArrayList<>();
 		try {
-			//			return champs;
 			for (File fileEntry : Objects.requireNonNull(jsonFilePath.toFile().listFiles())) {
 				Champion champ = mapper.readValue(new File(String.valueOf(fileEntry)), Champion.class);
 				champs.add(champ);
@@ -90,7 +86,6 @@ import java.util.stream.Stream;
 	 */
 	public Champion setIconByteArray(Champion champ) {
 		try {
-			log.info("Generating IconByteArray for: " + champ.getId());
 			byte[] imageByteArray = getByteArrayForImage(downloadChampionIcon(champ));
 			String fileName = champ.getId() + ".jpg";
 			String imageType = "image/jpg";

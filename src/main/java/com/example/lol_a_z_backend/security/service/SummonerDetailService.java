@@ -1,6 +1,7 @@
 package com.example.lol_a_z_backend.security.service;
 
 import com.example.lol_a_z_backend.model.Champion;
+import com.example.lol_a_z_backend.security.exception.UserExistsException;
 import com.example.lol_a_z_backend.security.model.Summoner;
 import com.example.lol_a_z_backend.security.repo.SummonerRepo;
 import com.example.lol_a_z_backend.service.ChampionService;
@@ -33,6 +34,9 @@ import java.util.List;
     }
 
     public Summoner registerUser(Summoner summoner) {
+        if (summonerExist(summoner)) {
+            throw new UserExistsException("This User already exists");
+        }
         try {
             summoner.setPassword(new BCryptPasswordEncoder().encode(summoner.getPassword()));
         } catch (IllegalArgumentException e) {
@@ -45,5 +49,11 @@ import java.util.List;
         }
         championService.saveListOfChamps(champs);
         return newSummoner;
+    }
+
+    private boolean summonerExist(Summoner summoner) {
+
+        return summonerRepo.findByUsername(summoner.getUsername()).isPresent();
+
     }
 }

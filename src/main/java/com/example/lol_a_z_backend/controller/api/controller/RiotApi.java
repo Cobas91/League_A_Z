@@ -22,7 +22,7 @@ import java.util.Objects;
 	 * @throws RiotApiGetChampionException
 	 */
 	public List<Champion> getAllChampions() throws RiotApiGetChampionException {
-		ResponseEntity<RiotApiResponse> response = restTemplate.getForEntity("http://ddragon.leagueoflegends.com/cdn/12.5.1/data/de_DE/champion.json", RiotApiResponse.class);
+		ResponseEntity<RiotApiResponse> response = restTemplate.getForEntity("http://ddragon.leagueoflegends.com/cdn/12.5.1/data/en_US/champion.json", RiotApiResponse.class);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new RiotApiGetChampionException("Error while request Champions");
 		}

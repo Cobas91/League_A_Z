@@ -4,46 +4,78 @@ import styled from "styled-components/macro";
 import {AuthContext} from "../security/AuthProvider";
 import {API_handleRegister} from "../service/AuthService";
 import {useNavigate} from "react-router-dom";
-import {Captcha} from 'primereact/captcha';
 import {InputText} from 'primereact/inputtext';
-import useChamps from '../hooks/useChampions'
+import NoRobotTask from "../components/NoRobotTask";
+import {toast} from "react-toastify";
 
 export default function Register() {
-    const [credentials, setCredentials] = useState()
-    const [repeatedPassword, setRepeatedPassword] = useState();
+    const [credentials, setCredentials] = useState({username: "", password: ""})
+    const [repeatedPassword, setRepeatedPassword] = useState("");
     const [noRobot, setNoRobot] = useState(false)
     const navigate = useNavigate();
     const {setJWT} = useContext(AuthContext)
-    const {refreshAllChamps} = useChamps();
 
     const handleRegister = (e) => {
         e.preventDefault()
-        if (repeatedPassword?.password_repeat === credentials?.password && noRobot) {
+        if (usernameIsValid() && passwordIsValid() && validateRobot()) {
             API_handleRegister(credentials)
-                .then((res) => {
-                    res ? setJWT(res) : setJWT("")
-                })
-                .then(() => {
-                        setTimeout(() => {
-                            refreshAllChamps()
-                            navigate("/")
-                        }, 1000);
+                .then((response) => {
+                    if (response.status === 208) {
+                        toast.error("Username existiert bereits");
+                    } else {
+                        if (response.data) {
+                            setJWT(response.data)
+                            toast.success("Summoner registriert. Du kannst dich jetzt anmelden.")
+                            navigate("/login")
+                        } else {
+                            setJWT("")
+                        }
                     }
-                )
+                })
+                .catch((err) => toast.error(err))
+        }
+    }
+
+    function validateRobot() {
+        if (noRobot) {
+            return true;
         } else {
-            console.log("No Equal password")
+            toast.error("Die Aufgabe muss korrekt gelöst werden.")
+            return false;
+        }
+    }
+
+    function passwordIsValid() {
+        if (repeatedPassword?.password_repeat === credentials?.password) {
+            return true
+        } else {
+            toast.error("Beide Passwörter müssen übereinstimmen.")
+            return false;
         }
 
     }
+
+    function usernameIsValid() {
+        if (credentials.username) {
+            return true;
+        } else {
+            toast.error("Bitte gib einen Usernamen ein.")
+            return false;
+        }
+
+    }
+
     const handleInput = (e) => {
         setCredentials({...credentials, [e.target.id]: e.target.value})
     }
     const handleRepeatedPasswordChange = (e) => {
         setRepeatedPassword({...repeatedPassword, [e.target.id]: e.target.value})
     }
-    const showResponse = (response) => {
-        setNoRobot(true);
+
+    const handleRobot = (input) => {
+        setNoRobot(input)
     }
+
     return (
         <RegisterContainer>
             <RegisterForm>
@@ -51,7 +83,7 @@ export default function Register() {
                     <StyledInput id="username" placeholder="Username" type="username" onChange={handleInput}/>
                     <StyledInput id="password" placeholder="Password" type="password" onChange={handleInput}/>
                     <StyledInput id="password_repeat" placeholder="Repeat Password" type="password" onChange={handleRepeatedPasswordChange}/>
-                    <Captcha siteKey="6LeypUYfAAAAAFOsRrWy-CXEbISm8pG4hbXV4cYo" onResponse={showResponse}></Captcha>
+                    <NoRobotTask handleRobot={handleRobot}/>
                 </InputContainer>
                 <StyledRegisterButton onClick={handleRegister}>Register</StyledRegisterButton>
                 <StyledRegisterButton onClick={()=>navigate("/login")}>Zurück zum Login</StyledRegisterButton>

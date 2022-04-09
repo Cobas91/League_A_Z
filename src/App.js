@@ -12,46 +12,60 @@ import RandomCard from "./pages/RandomCard";
 import PrivateRoute from "./security/PrivateRoute";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import {ToastContainer} from "react-toastify";
+import 'react-toastify/dist/ReactToastify.css';
 
 
 function App() {
     const {editChamp, champs, playable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, changePlayableFilter} = useChampions();
     return (
-        <Routes>
-            <Route path="/login" element={<Login/>}/>
-            <Route path="/register" element={<Register/>}/>
-            <Route path="/" element={<PrivateRoute/>}>
-                <Route path="/" element={
-                    <>
-                        <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
-                        <Content>
-                            <AzDefault editChamp={editChamp} champs={champs}/>
-                        </Content>
-                    </>
-                }/>
-            </Route>
-            <Route path="/" element={<PrivateRoute/>}>
-                <Route path="/singleCard" element={
-                    <>
-                        <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
-                        <Content>
-                            <SingleCard champs={champs} editChamp={editChampSingleCard} changePlayableFilter={changePlayableFilter} playable={playable}/>} />
-                        </Content>
-                    </>
-                }/>
-            </Route>
-            <Route path="/" element={<PrivateRoute/>}>
-                <Route path="/randomCard" element={
-                    <>
-                        <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
-                        <Content>
-                            <RandomCard champ={randomChamp} getRandomChamp={getRandomChamp}/>
-                        </Content>
-                    </>
-                }/>
-            </Route>
-
-        </Routes>
+        <div>
+            <Routes>
+                <Route path="/login" element={<Login/>}/>
+                <Route path="/register" element={<Register/>}/>
+                <Route path="/" element={<PrivateRoute/>}>
+                    <Route path="/" element={
+                        <>
+                            <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
+                            <Content>
+                                <AzDefault editChamp={editChamp} champs={champs}/>
+                            </Content>
+                        </>
+                    }/>
+                </Route>
+                <Route path="/" element={<PrivateRoute/>}>
+                    <Route path="/singleCard" element={
+                        <>
+                            <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
+                            <Content>
+                                <SingleCard champs={champs} editChamp={editChampSingleCard} changePlayableFilter={changePlayableFilter} playable={playable}/>} />
+                            </Content>
+                        </>
+                    }/>
+                </Route>
+                <Route path="/" element={<PrivateRoute/>}>
+                    <Route path="/randomCard" element={
+                        <>
+                            <HeadNavBar changePlayableFilter={changePlayableFilter} playable={playable} resetAllChampions={resetAllChampions}/>
+                            <Content>
+                                <RandomCard champ={randomChamp} getRandomChamp={getRandomChamp}/>
+                            </Content>
+                        </>
+                    }/>
+                </Route>
+            </Routes>
+            <ToastContainer
+                position="top-center"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+            />
+        </div>
     );
 }
 

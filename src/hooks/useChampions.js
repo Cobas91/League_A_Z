@@ -12,17 +12,13 @@ export default function UseChampions() {
         })
     }, [playable]);
 
-    const changePlayableFilter = (newState) => {
-        setPlayable(newState)
-        API_getAllChampsFiltered(playable).then((res) => setChamps(res))
-    }
-
     useEffect(() => {
         getRandomChamp();
     }, []);
 
-    const refreshAllChamps = () => {
-        API_getAllChampsFiltered(playable).then((res) => setChamps(res));
+    const changePlayableFilter = (newState) => {
+        setPlayable(newState)
+        API_getAllChampsFiltered(playable).then((res) => setChamps(res))
     }
 
     const getRandomChamp = () => {
@@ -53,7 +49,7 @@ export default function UseChampions() {
     }
 
     return {
-        editChamp, champs, playable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, editRandomChamp, changePlayableFilter, refreshAllChamps
+        editChamp, champs, playable, editChampSingleCard, resetAllChampions, randomChamp, getRandomChamp, editRandomChamp, changePlayableFilter
     }
 }
 

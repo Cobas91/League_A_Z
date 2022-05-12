@@ -1,16 +1,23 @@
 {
   "files": {
-    "main.css": "/static/css/main.13eca66f.css",
-    "main.js": "/static/js/main.01657959.js",
+    "main.css": "/static/css/main.9adaeaf0.css",
+    "main.js": "/static/js/main.f0101296.js",
     "static/js/787.95570022.chunk.js": "/static/js/787.95570022.chunk.js",
+    "static/media/background1.mp4": "/static/media/background1.854fa43f087e986198dc.mp4",
+    "static/media/background4.mp4": "/static/media/background4.f20966d938d7333e213d.mp4",
+    "static/media/background3.mp4": "/static/media/background3.4a174183f9734fea834e.mp4",
+    "static/media/background2.mp4": "/static/media/background2.14f24a721b3cbb58e39f.mp4",
     "static/media/downloadSpinner.gif": "/static/media/downloadSpinner.ab73c46d9d2e608ca854.gif",
+    "static/media/Friz_Quadrata-Italic.ttf": "/static/media/Friz_Quadrata-Italic.bec2d4b6f753ade55585.ttf",
+    "static/media/Friz_Quadrata-Regular.ttf": "/static/media/Friz_Quadrata-Regular.b7f0a4bc1da48c89dcf5.ttf",
+    "static/media/Friz_Quadrata-Bold.otf": "/static/media/Friz_Quadrata-Bold.edba907ef6e3787f4440.otf",
     "index.html": "/index.html",
-    "main.13eca66f.css.map": "/static/css/main.13eca66f.css.map",
-    "main.01657959.js.map": "/static/js/main.01657959.js.map",
+    "main.9adaeaf0.css.map": "/static/css/main.9adaeaf0.css.map",
+    "main.f0101296.js.map": "/static/js/main.f0101296.js.map",
     "787.95570022.chunk.js.map": "/static/js/787.95570022.chunk.js.map"
   },
   "entrypoints": [
-    "static/css/main.13eca66f.css",
-    "static/js/main.01657959.js"
+    "static/css/main.9adaeaf0.css",
+    "static/js/main.f0101296.js"
   ]
 }

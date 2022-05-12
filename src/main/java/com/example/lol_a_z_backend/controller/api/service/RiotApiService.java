@@ -5,6 +5,7 @@ import com.example.lol_a_z_backend.controller.api.exception.RiotApiGetChampionEx
 import com.example.lol_a_z_backend.controller.api.model.RiotApiResponse;
 import com.example.lol_a_z_backend.model.Champion;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -30,4 +31,5 @@ import java.util.List;
 		}
 		return List.of();
 	}
+
 }

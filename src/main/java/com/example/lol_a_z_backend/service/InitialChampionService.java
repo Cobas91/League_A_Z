@@ -7,6 +7,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.mock.web.MockMultipartFile;
+import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -35,14 +36,26 @@ import java.util.Objects;
 		try {
 			if (!Files.exists(jsonFilePath)) {
 				if (fileSystemUtil.createDirectory(jsonFilePath.toString())) {
-					downloadInitialChamps();
+					Thread task = new Thread(()->{
+						downloadInitialChamps();
+						Thread.currentThread().interrupt();
+					});
+					task.start();
 				}
 			} else if (fileSystemUtil.directoryIsEmpty(jsonFilePath)) {
-				downloadInitialChamps();
+				Thread task = new Thread(()->{
+					downloadInitialChamps();
+					Thread.currentThread().interrupt();
+				});
+				task.start();
 			}
 		} catch (IOException e) {
 			log.error(e.getMessage(), e);
 		}
+	}
+	@Scheduled(cron = "0 0 0 ? * TUE")
+	private void updateChampionData(){
+		log.info("Scheduled Task");
 	}
 
 	private void downloadInitialChamps() {

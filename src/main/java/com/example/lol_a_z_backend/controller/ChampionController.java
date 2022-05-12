@@ -36,7 +36,7 @@ public class ChampionController {
 		return service.getChampionsFilteredByAttribute(played);
 	}
 
-	@GetMapping("/champion/random") public Champion getRandomChampionIsNotPlayed() {
+	@GetMapping("/champions/random") public Champion getRandomChampionIsNotPlayed() {
 		log.info("Got Request for Random Champion" + " and User " + SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString());
 		return service.getRandomChampionIsNotPlayed();
 	}

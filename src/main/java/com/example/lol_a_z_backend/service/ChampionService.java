@@ -2,6 +2,7 @@ package com.example.lol_a_z_backend.service;
 
 import com.example.lol_a_z_backend.controller.api.service.RiotApiService;
 import com.example.lol_a_z_backend.model.Champion;
+import com.example.lol_a_z_backend.model.SummonerStatsDTO;
 import com.example.lol_a_z_backend.repository.ChampionRepo;
 import com.example.lol_a_z_backend.security.exception.SummonerNotExistException;
 import com.example.lol_a_z_backend.security.model.Summoner;
@@ -26,6 +27,10 @@ import java.util.Optional;
 		this.riotApiService = riotApiService;
 		this.userRepo = userRepo;
 		this.initialChampionService = initialChampionService;
+	}
+
+	public List<Champion> getAllChampsForStatistic(){
+		return repo.findAll();
 	}
 
 	private Summoner getSummoner() {
@@ -84,6 +89,18 @@ import java.util.Optional;
 
 	public void saveListOfChamps(List<Champion> champs) {
 		repo.saveAll(champs);
+	}
+
+	public List<SummonerStatsDTO> getChampionStats(){
+		List<Summoner> summoners = userRepo.findAll();
+		List<SummonerStatsDTO> statistics = new ArrayList<>();
+		for(Summoner summoner : summoners ){
+			List<Champion> summonerChamps = repo.findAllBySummonerId(summoner.getId());
+			for(Champion champ: summonerChamps){
+				statistics.add(SummonerStatsDTO.builder().championName(champ.getName()).summonerName(summoner.getUsername()).played(champ.isPlayed()).wins(champ.getWins()).looses(champ.getLoose()).build());
+			}
+		}
+		return statistics;
 	}
 
 }

@@ -1,16 +1,17 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import App from './App';
+import DesktopApp from './DesktopApp';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import AuthProvider from './security/AuthProvider'
+import { isBrowser} from 'react-device-detect';
+import MobileApp from "./MobileApp";
 
 ReactDOM.render(
     <React.StrictMode>
         <BrowserRouter>
             <AuthProvider>
-                <App/>
-
+                {isBrowser ? <DesktopApp/> : <MobileApp/>}
             </AuthProvider>
         </BrowserRouter>
 

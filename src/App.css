@@ -3,7 +3,7 @@ html{
 }
 *{
   margin: 0;
-  font-family: Verdana, sans-serif;
+  font-family: "Friz_Quadrata", serif;
 }
 
 ::-webkit-scrollbar {
@@ -16,4 +16,11 @@ html{
 ::-webkit-scrollbar-thumb {
   background: #888;
   border-radius: 10px;
+}
+
+@font-face {
+  font-family: Friz_Quadrata;
+  src: local("Friz_Quadrata"),
+  url("./font/Friz_Quadrata-Bold.otf") format("truetype");
+  font-weight: normal;
 }

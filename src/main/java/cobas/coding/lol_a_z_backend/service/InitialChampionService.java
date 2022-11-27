@@ -7,7 +7,6 @@ import cobas.coding.lol_a_z_backend.util.FileSystemUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.tomcat.jni.Directory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -32,18 +31,16 @@ import java.util.*;
 	private final RiotApiService riotApiService;
 	private final Path champDirectoryPath = Paths.get("./data/champs/");
 	private Path versionDirectory;
-	private final FileSystemUtil fileSystemUtil;
 	private String currentVersion;
 
-	public InitialChampionService(RiotApiService riotApiService, FileSystemUtil fileSystemUtil) {
+	public InitialChampionService(RiotApiService riotApiService) {
 		this.riotApiService = riotApiService;
-		this.fileSystemUtil = fileSystemUtil;
 	}
 
 	@PostConstruct private void init() {
 		this.currentVersion = systemInformationService.getLatestInformation().getChampVersion();
 		this.versionDirectory = Paths.get(this.champDirectoryPath + File.separator + riotApiService.getLatestVersion());
-		if (currentVersionIsOlderThenRiotVersion() || fileSystemUtil.directoryIsEmpty(this.versionDirectory)) {
+		if (currentVersionIsOlderThenRiotVersion() || FileSystemUtil.directoryIsEmpty(this.versionDirectory)) {
 			checkForNewChampions();
 		}
 	}
@@ -61,10 +58,10 @@ import java.util.*;
 
 	private void checkForNewChampions() {
 		if(!Files.exists(this.champDirectoryPath)){
-			fileSystemUtil.createDirectory(champDirectoryPath.toString());
+			FileSystemUtil.createDirectory(champDirectoryPath.toString());
 		}else if(!Files.exists(this.versionDirectory)){
-			fileSystemUtil.createDirectory(this.versionDirectory.toString());
-		}else if(fileSystemUtil.directoryIsEmpty(this.versionDirectory)){
+			FileSystemUtil.createDirectory(this.versionDirectory.toString());
+		}else if(FileSystemUtil.directoryIsEmpty(this.versionDirectory)){
 			startWorker();
 		}else{
 			this.currentVersion = riotApiService.getLatestVersion();
@@ -87,7 +84,7 @@ import java.util.*;
 				String destinationString = champDirectoryPath + File.separator + this.currentVersion;
 				File destinationDirectory = new File(destinationString);
 				if (!destinationDirectory.exists()) {
-					fileSystemUtil.createDirectory(destinationString);
+					FileSystemUtil.createDirectory(destinationString);
 				}
 				FileWriter file = new FileWriter(destinationDirectory + File.separator + champ.getName() + ".json");
 				Gson gson = new Gson();

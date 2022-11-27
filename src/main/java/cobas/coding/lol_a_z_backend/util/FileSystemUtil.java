@@ -9,9 +9,9 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
 @Slf4j
-@Service public class FileSystemUtil {
+public class FileSystemUtil {
 
-	public boolean directoryIsEmpty(Path path) {
+	public static boolean directoryIsEmpty(Path path) {
 		try {
 			if (Files.isDirectory(path)) {
 				try (Stream<Path> entries = Files.list(path)) {
@@ -25,7 +25,7 @@ import java.util.stream.Stream;
 		}
 	}
 
-	public boolean createDirectory(String path) {
+	public static boolean createDirectory(String path) {
 		File dir = new File(path);
 		return dir.mkdirs();
 	}

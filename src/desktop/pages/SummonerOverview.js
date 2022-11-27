@@ -1,13 +1,10 @@
 import * as React from 'react';
-import { DataTable } from 'primereact/datatable';
-import { Column } from 'primereact/column';
 import {useEffect, useState} from "react";
 import styled from "styled-components/macro";
 import {StatisticService} from "../../service/StatisticService";
-import FilterMatchMode from "primereact/api";
-import {GrCheckmark, GrClose} from "react-icons/gr";
 import background from "../../video/background4.mp4";
 import SummonerOverviewTable from "../components/SummonerOverviewTable";
+import HeadNavBar from "../components/HeadNavBar";
 export default function SummonerOverview() {
     const [statistics, setStatistics] = useState([]);
 
@@ -42,6 +39,7 @@ const StyledBackgroundVideo = styled.video`
 
 const StyledHeadline = styled.h2`
   color: white;
+  margin-top: 20px;
 `
 
 const StyledSummonerOverviewContainer = styled.section`

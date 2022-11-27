@@ -9,25 +9,34 @@ import {AuthContext} from "../../security/AuthProvider";
 import LanguageSelector from "./LanguageSelector";
 
 export default function HeadNavBar() {
-    const {logout, username} = useContext(AuthContext)
+    const {logout, username, authenticated} = useContext(AuthContext)
     const navigate = useNavigate();
 
-    const handleLogout = ()=>{
+    const handleLogout = () => {
         logout()
         navigate("/")
     }
     return (
-        <NavbarContainer>
-            <SiteNavigation>
+        <NavbarContainer authenticated={authenticated}>
+            {authenticated ? <SiteNavigation>
                 <StyledLink to="/home">All Champs</StyledLink>
                 <StyledLink to="/singleCard">SingleCard</StyledLink>
                 <StyledLink to="/overview">Overview</StyledLink>
-            </SiteNavigation>
+            </SiteNavigation> :
+                <SiteNavigation>
+                    <StyledLink to="/login">Login</StyledLink>
+                    <StyledLink to="/overview">Overview</StyledLink>
+                </SiteNavigation>
+            }
             <LanguageSelector/>
-            <StyledUserContainer>
-                <StyledUsernameText>{username ? username : ''}</StyledUsernameText>
-                <StyledLogutButton onClick={handleLogout}/>
-            </StyledUserContainer>
+            {authenticated ?
+                <StyledUserContainer>
+                    <StyledUsernameText>{username ? username : ''}</StyledUsernameText>
+                    <StyledLogutButton onClick={handleLogout}/>
+                </StyledUserContainer>
+                : <></>
+
+            }
         </NavbarContainer>
     )
 }
@@ -39,7 +48,7 @@ const StyledUserContainer = styled.section`
 `
 
 const StyledUsernameText = styled.label`
-    font-size: small;
+  font-size: small;
 `
 
 const StyledLogutButton = styled(FiLogOut)`
@@ -48,12 +57,12 @@ const StyledLogutButton = styled(FiLogOut)`
   height: 2vh;
   cursor: pointer;
   transition: all 0.2s ease-in-out;
-  :hover{
+
+  :hover {
     color: red;
     box-shadow: grey;
   }
 `
-
 
 
 const StyledLink = styled(Link)`
@@ -80,18 +89,13 @@ const SiteNavigation = styled.section`
 
 const NavbarContainer = styled.section`
   position: fixed;
+  top: 0;
   width: 100%;
   height: 80px;
   display: grid;
   grid-template-columns: 80vw  30px 100px;
   justify-content: space-around;
-  background-color: ghostwhite;
+  background: ghostwhite;
   align-items: center;
   z-index: 1;
-`
-
-const StyledCheckbox = styled.input`
-  height: 20px;
-  width: 20px;
-  cursor: pointer;
 `

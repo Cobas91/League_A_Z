@@ -8,17 +8,19 @@ import {InputText} from 'primereact/inputtext';
 import NoRobotTask from "../components/NoRobotTask";
 import {toast} from "react-toastify";
 import background from "../../video/background3.mp4";
+import LoadingAnimation from "../components/LoadingAnimation";
 
 export default function Register() {
-    const [credentials, setCredentials] = useState({username: "", password: ""})
+    const [credentials, setCredentials] = useState({username: "", password: "", email: ""})
     const [repeatedPassword, setRepeatedPassword] = useState("");
     const [noRobot, setNoRobot] = useState(false)
     const navigate = useNavigate();
     const {setJWT} = useContext(AuthContext)
+    const [processingLogin, setProcessingLogin] = useState(false);
 
     const handleRegister = (e) => {
         e.preventDefault()
-        if (usernameIsValid() && passwordIsValid() && validateRobot()) {
+        if (passwordIsValid() && validateRobot()) {
             API_handleRegister(credentials)
                 .then((response) => {
                     if (response.status === 208) {
@@ -26,8 +28,11 @@ export default function Register() {
                     } else {
                         if (response.data) {
                             setJWT(response.data)
-                            toast.success("Summoner registriert. Du kannst dich jetzt anmelden.")
-                            navigate("/login")
+                            toast.success("Summoner registriert. Viel spaß!")
+                            setProcessingLogin(true)
+                            setTimeout(() => {
+                                navigate("/home")
+                            }, 3500)
                         } else {
                             setJWT("")
                         }
@@ -56,15 +61,6 @@ export default function Register() {
 
     }
 
-    function usernameIsValid() {
-        if (credentials.username) {
-            return true;
-        } else {
-            toast.error("Bitte gib einen Usernamen ein.")
-            return false;
-        }
-
-    }
 
     const handleInput = (e) => {
         setCredentials({...credentials, [e.target.id]: e.target.value})
@@ -78,30 +74,41 @@ export default function Register() {
     }
 
     return (
+
         <RegisterContainer>
-            <RegisterForm>
-                <StyledBackgroundVideo autoPlay loop muted>
-                    <source src={background} type="video/mp4"/>
-                </StyledBackgroundVideo>
-                <InputContainer>
-                    <StyledInput id="username" placeholder="Username" type="username" onChange={handleInput}/>
-                    <StyledInput id="password" placeholder="Password" type="password" onChange={handleInput}/>
-                    <StyledInput id="password_repeat" placeholder="Repeat Password" type="password" onChange={handleRepeatedPasswordChange}/>
-                    <NoRobotTask handleRobot={handleRobot}/>
-                </InputContainer>
-                <StyledRegisterButton onClick={handleRegister}>Register</StyledRegisterButton>
-                <StyledRegisterButton onClick={()=>navigate("/login")}>Zurück zum Login</StyledRegisterButton>
-            </RegisterForm>
+            {processingLogin ? <LoadingAnimation/> :
+                <RegisterForm onSubmit={handleRegister}>
+                    <StyledBackgroundVideo autoPlay loop muted>
+                        <source src={background} type="video/mp4"/>
+                    </StyledBackgroundVideo>
+                    <InputContainer>
+                        <StyledInput required={true} id="username" placeholder="Username" type="username" onChange={handleInput}/>
+                        <StyledInput required={true} id="email" placeholder="E-Mail" type="email" onChange={handleInput}/>
+                        <StyledInput required={true} id="password" placeholder="Password" type="password" onChange={handleInput}/>
+                        <StyledInput required={true} id="password_repeat" placeholder="Repeat Password" type="password" onChange={handleRepeatedPasswordChange}/>
+                        <NoRobotTask handleRobot={handleRobot}/>
+                    </InputContainer>
+                    <ButtonArea>
+                        <StyledRegisterButton onClick={() => navigate("/login")}>Zurück zum Login</StyledRegisterButton>
+                        <StyledRegisterButton type="submit" onSubmit={handleRegister}>Register</StyledRegisterButton>
+                    </ButtonArea>
+
+                </RegisterForm>}
+
 
         </RegisterContainer>
     )
 }
+const ButtonArea = styled.section`
+  display: flex;
+  justify-content: space-evenly;
+`
 const StyledBackgroundVideo = styled.video`
   position: absolute;
   width: 100%;
   height: 100%;
   left: 50%;
-  top:50%;
+  top: 50%;
   object-fit: cover;
   transform: translate(-50%, -50%);
   z-index: -1;
@@ -111,7 +118,7 @@ const RegisterContainer = styled.section`
   justify-content: center;
   align-items: center;
   height: 100vh;
-  
+
 `
 const RegisterForm = styled.form`
   display: flex;
@@ -152,7 +159,8 @@ const StyledRegisterButton = styled.button`
   justify-content: center;
   overflow: hidden;
   transition: all 0.2s ease-in-out;
-  :hover{
+
+  :hover {
     color: red;
     box-shadow: grey;
   }

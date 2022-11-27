@@ -2,7 +2,7 @@ import * as React from 'react';
 import {useContext, useState} from 'react';
 import styled from "styled-components/macro";
 import {API_handleLogin} from "../../service/AuthService";
-import {useNavigate} from "react-router-dom";
+import {Link, useNavigate} from "react-router-dom";
 import {AuthContext} from '../../security/AuthProvider'
 import {InputText} from 'primereact/inputtext';
 import {toast} from 'react-toastify';
@@ -60,20 +60,38 @@ export default function Login() {
                             <source src={background} type="video/mp4"/>
                         </StyledBackgroundVideo>
                         <StyledHeadline>Login</StyledHeadline>
+
                         <InputArea>
-                            <StyledInput onChange={handleTextInput} id="username" placeholder="Username"/>
-                            <StyledInput onChange={handleTextInput} placeholder="Passwort" id="password" type="password"/>
+                            <StyledInput required={true} onChange={handleTextInput} id="username" placeholder="Username"/>
+                            <StyledInput required={true} onChange={handleTextInput} placeholder="Passwort" id="password" type="password"/>
                         </InputArea>
 
                         <ButtonArea>
-                            <StyledButton onClick={handleLogin} type="submit">Login</StyledButton>
-                            <StyledButton onClick={handleRegisterButton} type="submit">Register</StyledButton>
+                            <StyledButton onSubmit={handleLogin} type="submit">Login</StyledButton>
+                            <StyledButton onClick={handleRegisterButton} type="button">Register</StyledButton>
                         </ButtonArea>
+                        <StyledLink to="/password">Passwort vergessen?</StyledLink>
                     </LoginForm>
             }
         </LoginContainer>
     )
 }
+const StyledLink = styled(Link)`
+  color: #777777;
+  text-decoration: none;
+  font-size: 0.8em;
+  text-transform: uppercase;
+  display: inline-block;
+  -webkit-transition: all 0.2s ease-in-out;
+  transition: all 0.2s ease-in-out;
+  margin: 0 20px 0 20px;
+  align-self: center;
+
+  :hover {
+    color: red;
+    box-shadow: grey;
+  }
+`
 const StyledBackgroundVideo = styled.video`
   position: absolute;
   width: 100%;
@@ -131,7 +149,7 @@ const LoginForm = styled.form`
 `
 
 const StyledHeadline = styled.h1`
-  color: red;
+  color: #888787;
 `
 
 const LoginContainer = styled.section`

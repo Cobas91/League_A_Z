@@ -36,6 +36,8 @@ export default function ChampionCardWithStats({champ, editChamp}) {
                 <NameTitleContainer>
                     <Name>{champ?.name}</Name>
                     <Title>{champ?.title}</Title>
+                    <StyledBar hp={true}>{champ?.stats?.hp}</StyledBar>
+                    <StyledBar hp={false}>{champ?.stats?.mp}</StyledBar>
                 </NameTitleContainer>
             </StyledHeader>
             <PlayBox>
@@ -70,6 +72,14 @@ export default function ChampionCardWithStats({champ, editChamp}) {
         </ChampionContainer>
     )
 }
+const StyledBar = styled.span`
+  background-color: ${props => props?.hp ? '#d03535' : '#3e3ece'};
+  font-size: 0.9rem;
+  width: 80%;
+  border-radius: 20px;
+  text-align: center;
+  padding: 3px
+`
 const StatRow = styled.section`
     display: flex;
   justify-content: space-between;
@@ -175,4 +185,5 @@ const NameTitleContainer = styled.section`
   display: flex;
   align-items: center;
   flex-direction: column;
+  gap: 5px;
 `

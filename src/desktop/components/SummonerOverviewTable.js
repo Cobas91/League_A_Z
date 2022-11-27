@@ -8,26 +8,24 @@ import {GrCheckmark, GrClose} from "react-icons/gr";
 
 export default function SummonerOverviewTable({statistics}) {
     const [filters] = useState({
-        'summonerName': { value: null, matchMode: FilterMatchMode.STARTS_WITH },
-        'championName': { value: null, matchMode: FilterMatchMode.STARTS_WITH }
+        'summonerName': {value: null, matchMode: FilterMatchMode.STARTS_WITH},
+        'championName': {value: null, matchMode: FilterMatchMode.STARTS_WITH}
     });
     const verifiedBodyTemplate = (rowData) => {
         return rowData.played ?
-                        <StyledPlayedSection>
-                            <p>{rowData.looses}L</p>
-                        </StyledPlayedSection>
-                        :
-                        <StyledPlayedSection>
-                            <StyledUncheck/>
-                        </StyledPlayedSection>
-
-
-
+            <StyledPlayedSection>
+                <p>{rowData.looses}L</p>
+            </StyledPlayedSection>
+            :
+            <StyledPlayedSection>
+                <StyledUncheck/>
+            </StyledPlayedSection>
             ;
     }
     return (
         <StyledTableContainer>
-            <DataTable paginator rows={15} filters={filters} emptyMessage="No Summoners found" value={statistics} responsiveLayout="scroll" filterDisplay="row" showGridlines globalFilterFields={['summonerName', 'championName']}>
+            <DataTable paginator rows={50} filters={filters} emptyMessage="No Summoners found" value={statistics} responsiveLayout="scroll" filterDisplay="row" showGridlines
+                       globalFilterFields={['summonerName', 'championName']}>
                 <Column filter filterPlaceholder="Search by name" field="summonerName" header="Username"/>
                 <Column filter filterPlaceholder="Search by name" field="championName" header="Champion"/>
                 <Column field="played" header="Played" dataType="boolean" body={verifiedBodyTemplate}/>
@@ -41,7 +39,7 @@ const StyledPlayedSection = styled.section`
 
 const StyledTableContainer = styled.section`
   width: 80%;
-  margin-top: 20px;
+  margin-top: 50px;
 `
 const StyledCheck = styled(GrCheckmark)`
   color: green;

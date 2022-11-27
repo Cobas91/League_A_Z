@@ -1,6 +1,7 @@
 package cobas.coding.lol_a_z_backend.security.service;
 
 import cobas.coding.lol_a_z_backend.model.Champion;
+import cobas.coding.lol_a_z_backend.model.SummonerDTO;
 import cobas.coding.lol_a_z_backend.security.exception.UserExistsException;
 import cobas.coding.lol_a_z_backend.security.model.Summoner;
 import cobas.coding.lol_a_z_backend.security.repo.SummonerRepo;
@@ -34,24 +35,22 @@ import java.util.Set;
                 .orElseThrow(() -> new UsernameNotFoundException("Username does not exist: " + username));
     }
 
-    public Summoner registerUser(Summoner summoner) {
-        if (summonerExist(summoner)) {
+    public Summoner registerUser(SummonerDTO summonerDTO) {
+        if (summonerExist(summonerDTO.getUsername())) {
             throw new UserExistsException("This User already exists");
         }
-        try {
-            summoner.setPassword(new BCryptPasswordEncoder().encode(summoner.getPassword()));
-        } catch (IllegalArgumentException e) {
-            log.error(e.getMessage(), e);
-        }
         List<Champion> champs = championService.getDefaultChamps();
-        summoner.setChampions(champs);
+        Summoner summoner = Summoner.builder()
+                .username(summonerDTO.getUsername())
+                .password(new BCryptPasswordEncoder().encode(summonerDTO.getPassword()))
+                .champions(champs)
+                .build();
         summonerRepo.save(summoner);
         return summoner;
     }
 
-    private boolean summonerExist(Summoner summoner) {
-
-        return summonerRepo.findByUsernameEquals(summoner.getUsername()).isPresent();
+    private boolean summonerExist(String username) {
+        return summonerRepo.findByUsernameEquals(username).isPresent();
 
     }
 }

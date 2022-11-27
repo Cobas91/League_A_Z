@@ -8,4 +8,5 @@ import lombok.Setter;
 public class SummonerDTO {
 	String username;
 	String password;
+	String email;
 }

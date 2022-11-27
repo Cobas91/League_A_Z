@@ -54,7 +54,7 @@ import java.util.*;
 			throw new RiotApiGetChampionException("Error while request Champions");
 		}
 		String[] versions = response.getBody();
-		log.info("Newest League of Legends version: "+versions[0]);
+		log.info("League of Legends version: "+versions[0]);
 		return versions;
 	}
 }

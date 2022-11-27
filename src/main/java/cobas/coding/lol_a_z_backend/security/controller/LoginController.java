@@ -1,6 +1,7 @@
 package cobas.coding.lol_a_z_backend.security.controller;
 
 import cobas.coding.lol_a_z_backend.model.SummonerDTO;
+import cobas.coding.lol_a_z_backend.security.model.PasswordResetDTO;
 import cobas.coding.lol_a_z_backend.security.model.Summoner;
 import cobas.coding.lol_a_z_backend.security.service.JWTUtilService;
 import cobas.coding.lol_a_z_backend.security.service.SummonerDetailService;
@@ -35,5 +36,9 @@ public class LoginController {
 
     @PostMapping("/register") public String register(@RequestBody SummonerDTO summoner) {
         return jwtService.createToken(new HashMap<>(), userService.registerUser(summoner).getUsername());
+    }
+    @PostMapping("/password/reset")
+    public String resetPassword(@RequestBody PasswordResetDTO passwordResetDTO){
+        return userService.resetPassword(passwordResetDTO);
     }
 }

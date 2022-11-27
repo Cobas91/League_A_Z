@@ -12,5 +12,6 @@ public class RepositoryProvider {
 	ChampionRepo championRepo;
 	@Autowired
 	SystemInformationRepository systemInformationRepository;
-	@Autowired SummonerRepo summonerRepo;
+	@Autowired
+	SummonerRepo summonerRepo;
 }

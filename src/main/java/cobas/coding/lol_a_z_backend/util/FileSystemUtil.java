@@ -17,6 +17,8 @@ public class FileSystemUtil {
 				try (Stream<Path> entries = Files.list(path)) {
 					return entries.findFirst().isEmpty();
 				}
+			}else if(!Files.exists(path)){
+				return true;
 			}
 			return false;
 		} catch (IOException e) {

@@ -39,31 +39,33 @@ import java.util.*;
 
 	@PostConstruct private void init() {
 		this.currentVersion = systemInformationService.getLatestInformation().getChampVersion();
-		this.versionDirectory = Paths.get(this.champDirectoryPath + File.separator + riotApiService.getLatestVersion());
-		if (currentVersionIsOlderThenRiotVersion() || FileSystemUtil.directoryIsEmpty(this.versionDirectory)) {
+		String riotVersion = riotApiService.getLatestVersion();
+		this.versionDirectory = Paths.get(this.champDirectoryPath + File.separator + riotVersion);
+		if (currentVersionIsOlderThenRiotVersion(riotVersion) || FileSystemUtil.directoryIsEmpty(this.versionDirectory)) {
 			checkForNewChampions();
 		}
 	}
 
-	private boolean currentVersionIsOlderThenRiotVersion() {
-		String currentRiotVersion = riotApiService.getLatestVersion();
+	private boolean currentVersionIsOlderThenRiotVersion(String riotVersion) {
 		int currentInt = Integer.parseInt(this.currentVersion.replace(".", ""));
-		int riotInt = Integer.parseInt(currentRiotVersion.replace(".", ""));
+		int riotInt = Integer.parseInt(riotVersion.replace(".", ""));
 		return currentInt < riotInt;
 	}
 
-	@Scheduled(cron = "0 0 0 ? * TUE") private void updateChampionData() {
+	@Scheduled(cron = "0 59 23 ? * WED") private void updateChampionData() {
 		init();
 	}
 
 	private void checkForNewChampions() {
 		if(!Files.exists(this.champDirectoryPath)){
 			FileSystemUtil.createDirectory(champDirectoryPath.toString());
+			FileSystemUtil.createDirectory(this.versionDirectory.toString());
+			startWorker();
 		}else if(!Files.exists(this.versionDirectory)){
 			FileSystemUtil.createDirectory(this.versionDirectory.toString());
-		}else if(FileSystemUtil.directoryIsEmpty(this.versionDirectory)){
 			startWorker();
-		}else{
+		}
+		else{
 			this.currentVersion = riotApiService.getLatestVersion();
 			systemInformationService.addInformation(SystemInformation.builder().champCount(0).champVersion(this.currentVersion).build());
 		}

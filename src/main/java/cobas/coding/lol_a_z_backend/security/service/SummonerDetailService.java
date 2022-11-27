@@ -3,6 +3,7 @@ package cobas.coding.lol_a_z_backend.security.service;
 import cobas.coding.lol_a_z_backend.model.Champion;
 import cobas.coding.lol_a_z_backend.model.SummonerDTO;
 import cobas.coding.lol_a_z_backend.security.exception.UserExistsException;
+import cobas.coding.lol_a_z_backend.security.model.PasswordResetDTO;
 import cobas.coding.lol_a_z_backend.security.model.Summoner;
 import cobas.coding.lol_a_z_backend.security.repo.SummonerRepo;
 import cobas.coding.lol_a_z_backend.service.ChampionService;
@@ -43,6 +44,7 @@ import java.util.Set;
         Summoner summoner = Summoner.builder()
                 .username(summonerDTO.getUsername())
                 .password(new BCryptPasswordEncoder().encode(summonerDTO.getPassword()))
+                .email(summonerDTO.getEmail())
                 .champions(champs)
                 .build();
         summonerRepo.save(summoner);
@@ -52,5 +54,11 @@ import java.util.Set;
     private boolean summonerExist(String username) {
         return summonerRepo.findByUsernameEquals(username).isPresent();
 
+    }
+
+    public String resetPassword(PasswordResetDTO passwordResetDTO) {
+        //TODO
+        log.info(passwordResetDTO.toString());
+        return "";
     }
 }

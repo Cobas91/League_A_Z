@@ -3,16 +3,16 @@ import {useEffect, useState} from "react";
 export default function UseChampions() {
     const [playable, setPlayable] = useState(false)
     const [reloadChamps, setReloadChamps] = useState(false);
-    useEffect(()=>{
+    useEffect(() => {
         setReloadChamps(!reloadChamps)
-    },[playable])
+    }, [playable])
 
-    const resetChampions = ()=>{
+    const resetChampions = () => {
         setReloadChamps(!reloadChamps)
     }
 
     return {
-       playable, setPlayable, resetChampions, reloadChamps
+        playable, setPlayable, resetChampions, reloadChamps
     }
 }
 

@@ -2,7 +2,6 @@ import * as React from 'react';
 import {useContext} from 'react';
 import styled from "styled-components/macro";
 import {Link, useNavigate} from "react-router-dom";
-import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
 import {FiLogOut} from "react-icons/fi";
 import {AuthContext} from "../../security/AuthProvider";
@@ -19,10 +18,10 @@ export default function HeadNavBar() {
     return (
         <NavbarContainer authenticated={authenticated}>
             {authenticated ? <SiteNavigation>
-                <StyledLink to="/home">All Champs</StyledLink>
-                <StyledLink to="/singleCard">SingleCard</StyledLink>
-                <StyledLink to="/overview">Overview</StyledLink>
-            </SiteNavigation> :
+                    <StyledLink to="/home">All Champs</StyledLink>
+                    <StyledLink to="/singleCard">SingleCard</StyledLink>
+                    <StyledLink to="/overview">Overview</StyledLink>
+                </SiteNavigation> :
                 <SiteNavigation>
                     <StyledLink to="/login">Login</StyledLink>
                     <StyledLink to="/overview">Overview</StyledLink>

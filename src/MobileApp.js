@@ -33,7 +33,7 @@ function MobileApp() {
                 <Route path="/" element={<PrivateRoute/>}>
                     <Route path="/home" element={
                         <>
-                            <HeadNavBar changePlayableFilter={setPlayable} />
+                            <HeadNavBar changePlayableFilter={setPlayable}/>
                             <Content>
                                 <OptionNavigation playable={playable} changePlayableFilter={setPlayable} resetChampions={resetChampions}/>
                                 <AzDefault playable={playable} reloadChamps={reloadChamps}/>
@@ -44,9 +44,9 @@ function MobileApp() {
                 <Route path="/" element={<PrivateRoute/>}>
                     <Route path="/singleCard" element={
                         <>
-                            <HeadNavBar changePlayableFilter={setPlayable} />
+                            <HeadNavBar changePlayableFilter={setPlayable}/>
                             <Content>
-                                <SingleCard />
+                                <SingleCard/>
                             </Content>
                         </>
                     }/>

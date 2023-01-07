@@ -55,7 +55,7 @@ export default function Login() {
 
             {
                 processingLogin ? <LoadingAnimation/> :
-                    <LoginForm>
+                    <LoginForm onSubmit={handleLogin}>
                         <StyledBackgroundVideo autoPlay loop muted>
                             <source src={background} type="video/mp4"/>
                         </StyledBackgroundVideo>
@@ -67,7 +67,7 @@ export default function Login() {
                         </InputArea>
 
                         <ButtonArea>
-                            <StyledButton onSubmit={handleLogin} type="submit">Login</StyledButton>
+                            <StyledButton onClick={handleLogin} type="submit">Login</StyledButton>
                             <StyledButton onClick={handleRegisterButton} type="button">Register</StyledButton>
                         </ButtonArea>
                         <StyledLink to="/password">Passwort vergessen?</StyledLink>

@@ -1,8 +1,9 @@
-import { createContext, useEffect, useState } from 'react'
+import {createContext, useEffect, useState} from 'react'
 import jwt_decode from 'jwt-decode'
+
 export const AuthContext = createContext({})
 
-export default function AuthProvider({ children }) {
+export default function AuthProvider({children}) {
     const [JWT, setJWT] = useState(localStorage.getItem('JWT') || '')
     const [username, setUsername] = useState('')
     const [authenticated, setAuthenticated] = useState(false);
@@ -19,7 +20,7 @@ export default function AuthProvider({ children }) {
     }
 
     return (
-        <AuthContext.Provider value={{ setJWT, logout, username, authenticated }}>
+        <AuthContext.Provider value={{setJWT, logout, username, authenticated}}>
             {children}
         </AuthContext.Provider>
     )

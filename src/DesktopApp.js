@@ -2,7 +2,7 @@ import './App.css';
 import './font/Friz_Quadrata-Bold.otf';
 import './font/Friz_Quadrata-Italic.ttf';
 import './font/Friz_Quadrata-Regular.ttf';
-import {Link, Route, Routes,} from "react-router-dom";
+import {Route, Routes,} from "react-router-dom";
 import "primereact/resources/themes/bootstrap4-dark-blue/theme.css";
 import "primereact/resources/primereact.min.css";
 import AzDefault from "./desktop/pages/AZDefault";
@@ -20,8 +20,6 @@ import OptionNavigation from "./desktop/components/OptionNavigation";
 import SummonerOverview from "./desktop/pages/SummonerOverview";
 import Home from "./desktop/pages/Home";
 import './InitLanguages'
-import {useContext} from "react";
-import {AuthContext} from "./security/AuthProvider";
 import Password from "./desktop/pages/Password";
 
 

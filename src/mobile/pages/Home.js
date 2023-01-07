@@ -5,10 +5,10 @@ import {useNavigate} from "react-router-dom";
 
 export default function Home() {
     const navigate = useNavigate();
-    const onPlayClick = ()=>{
+    const onPlayClick = () => {
         navigate("/login")
     }
-    const onStatisticClick = ()=>{
+    const onStatisticClick = () => {
         navigate("/overview")
     }
     return (
@@ -23,7 +23,7 @@ export default function Home() {
                 <StyledButton onClick={onPlayClick}>Play!</StyledButton>
                 <StyledButton onClick={onStatisticClick}>Show stats!</StyledButton>
             </StyledHomeContent>
-            <StyledVersionLabel>Version  {process.env.REACT_APP_VERSION}</StyledVersionLabel>
+            <StyledVersionLabel>Version {process.env.REACT_APP_VERSION}</StyledVersionLabel>
         </StyledHomeContainer>
     )
 }

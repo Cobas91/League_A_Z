@@ -21,14 +21,14 @@ const API_getAllChampsFiltered = (played) => {
         .catch(err => err.response)
 }
 
-const API_resetAllChampions = ()=>{
+const API_resetAllChampions = () => {
     return axios
         .get('/api/champions/reset', createHeader(localStorage.getItem('JWT')))
         .then(res => res)
         .catch(err => err.response)
 }
 
-const API_getRandomChamp = ()=>{
+const API_getRandomChamp = () => {
     return axios
         .get('/api/champions/random', createHeader(localStorage.getItem('JWT')))
         .then(res => res)

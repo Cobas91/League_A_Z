@@ -2,9 +2,6 @@ import * as React from 'react';
 import styled from "styled-components/macro";
 import {MdDoubleArrow} from "react-icons/md";
 
-var base64 = require('base-64');
-
-
 export default function ChampionCard({champ, editChamp}) {
 
 

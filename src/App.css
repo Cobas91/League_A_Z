@@ -1,26 +1,29 @@
-html{
-  background-color: black;
+html {
+    background-color: black;
 }
-*{
-  margin: 0;
-  font-family: "Friz_Quadrata", serif;
+
+* {
+    margin: 0;
+    font-family: "Friz_Quadrata", serif;
 }
 
 ::-webkit-scrollbar {
-  width: 10px;
+    width: 10px;
 }
+
 ::-webkit-scrollbar-track {
-  background: #000000;
+    background: #000000;
 }
+
 /* Handle */
 ::-webkit-scrollbar-thumb {
-  background: #888;
-  border-radius: 10px;
+    background: #888;
+    border-radius: 10px;
 }
 
 @font-face {
-  font-family: Friz_Quadrata;
-  src: local("Friz_Quadrata"),
-  url("./font/Friz_Quadrata-Bold.otf") format("truetype");
-  font-weight: normal;
+    font-family: Friz_Quadrata;
+    src: local("Friz_Quadrata"),
+    url("./font/Friz_Quadrata-Bold.otf") format("truetype");
+    font-weight: normal;
 }

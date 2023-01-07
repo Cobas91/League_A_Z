@@ -6,13 +6,13 @@ import {API_editChampion, API_getAllChampsFiltered} from "../../service/Champion
 
 export default function AzDefault({playable, reloadChamps}) {
     const [champs, setChamps] = useState([]);
-    useEffect(()=>{
+    useEffect(() => {
         getAllChamps()
-    },[reloadChamps])
-    const editChamp = (champ)=>{
+    }, [reloadChamps])
+    const editChamp = (champ) => {
         API_editChampion(champ).then(getAllChamps)
     }
-    const getAllChamps = ()=>{
+    const getAllChamps = () => {
         API_getAllChampsFiltered(playable).then(res => setChamps(res.data))
     }
     return (

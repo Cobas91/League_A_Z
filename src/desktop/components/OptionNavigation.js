@@ -22,7 +22,7 @@ export default function OptionNavigation({playable, changePlayableFilter, resetC
             ]
         })
     }
-    const resetChamps = ()=>{
+    const resetChamps = () => {
         resetChampions(true)
         API_resetAllChampions()
     }

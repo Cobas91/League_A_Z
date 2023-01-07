@@ -22,9 +22,9 @@ export default function ChampionCardWithStats({champ, editChamp}) {
     }
 
     const stats = [];
-    if(champ){
-        Object.keys(champ?.stats).forEach(function(key) {
-            stats.push({name:[key], value:champ.stats[key]})
+    if (champ) {
+        Object.keys(champ?.stats).forEach(function (key) {
+            stats.push({name: [key], value: champ.stats[key]})
         });
     }
 

@@ -2,29 +2,27 @@ import * as React from 'react';
 import {useContext, useState} from 'react';
 import styled from "styled-components/macro";
 import {Link, useNavigate} from "react-router-dom";
-import {confirmAlert} from 'react-confirm-alert';
 import 'react-confirm-alert/src/react-confirm-alert.css'
-import {FiLogOut} from "react-icons/fi";
+import {FiAlignRight, FiLogOut} from "react-icons/fi";
 import {AuthContext} from "../../security/AuthProvider";
 import LanguageSelector from "./LanguageSelector";
-import { GiCardBurn, GiCardJoker, GiCardPick } from "react-icons/gi";
-import { FiAlignRight } from "react-icons/fi";
+import {GiCardBurn, GiCardJoker, GiCardPick} from "react-icons/gi";
 
 export default function HeadNavBar() {
     const {logout, username} = useContext(AuthContext)
     const [showMenu, setShowMenu] = useState(false);
     const navigate = useNavigate();
 
-    const handleLogout = ()=>{
+    const handleLogout = () => {
         logout()
         navigate("/")
     }
-    const toggleMenu = ()=>{
+    const toggleMenu = () => {
         setShowMenu(!showMenu)
     }
-    const Menu = (props)=>{
+    const Menu = (props) => {
         const showMenu = props.showMenu;
-        if(showMenu){
+        if (showMenu) {
             return (<StyledMenuContainer>
                 <LanguageSelector/>
                 <StyledUserContainer>
@@ -97,7 +95,6 @@ const StyledLogutButton = styled(FiLogOut)`
     box-shadow: grey;
   }
 `
-
 
 
 const StyledLink = styled(Link)`

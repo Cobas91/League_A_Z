@@ -90,7 +90,7 @@ export default function Register() {
                     <NoRobotTask handleRobot={handleRobot}/>
                 </InputContainer>
                 <StyledRegisterButton onClick={handleRegister}>Register</StyledRegisterButton>
-                <StyledRegisterButton onClick={()=>navigate("/login")}>Zurück zum Login</StyledRegisterButton>
+                <StyledRegisterButton onClick={() => navigate("/login")}>Zurück zum Login</StyledRegisterButton>
             </RegisterForm>
 
         </RegisterContainer>

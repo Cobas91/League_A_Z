@@ -1,19 +1,19 @@
 import * as React from 'react';
-import {useEffect, useState} from "react";
+import {useEffect, useState} from 'react';
 import styled from "styled-components/macro";
 import {StatisticService} from "../../service/StatisticService";
 import background from "../../video/background4.mp4";
 import SummonerOverviewTable from "../components/SummonerOverviewTable";
-import HeadNavBar from "../components/HeadNavBar";
+
 export default function SummonerOverview() {
     const [statistics, setStatistics] = useState([]);
 
     const statisticService = new StatisticService();
-    useEffect(()=>{
-        statisticService.getSummonerStatistic().then((res)=>{
+    useEffect(() => {
+        statisticService.getSummonerStatistic().then((res) => {
             setStatistics(res.summoners)
         })
-    },[])
+    }, [])
 
     return (
         <StyledSummonerOverviewContainer>
@@ -31,7 +31,7 @@ const StyledBackgroundVideo = styled.video`
   width: 100%;
   height: 100%;
   left: 50%;
-  top:50%;
+  top: 50%;
   object-fit: cover;
   transform: translate(-50%, -50%);
   z-index: -1;

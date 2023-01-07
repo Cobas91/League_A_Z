@@ -6,15 +6,15 @@ import {API_editChampion, API_getAllChampsFiltered} from "../../service/Champion
 
 export default function SingleCard() {
     const [champs, setChamps] = useState([])
-    useEffect(()=>{
+    useEffect(() => {
         getAllChamps()
-    },[])
+    }, [])
 
-    const editChamp = (champ)=>{
+    const editChamp = (champ) => {
         API_editChampion(champ).then(getAllChamps)
     }
 
-    const getAllChamps = ()=>{
+    const getAllChamps = () => {
         API_getAllChampsFiltered(false).then(res => setChamps(res.data))
 
     }

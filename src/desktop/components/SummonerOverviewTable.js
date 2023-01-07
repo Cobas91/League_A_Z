@@ -1,10 +1,10 @@
 import * as React from 'react';
+import {useState} from 'react';
 import {DataTable} from "primereact/datatable";
 import {Column} from "primereact/column";
 import styled from "styled-components/macro";
-import {useState} from "react";
 import FilterMatchMode from "primereact/api";
-import {GrCheckmark, GrClose} from "react-icons/gr";
+import {GrClose} from "react-icons/gr";
 
 export default function SummonerOverviewTable({statistics}) {
     const [filters] = useState({
@@ -41,9 +41,7 @@ const StyledTableContainer = styled.section`
   width: 80%;
   margin-top: 50px;
 `
-const StyledCheck = styled(GrCheckmark)`
-  color: green;
-`
+
 const StyledUncheck = styled(GrClose)`
   color: red;
 `

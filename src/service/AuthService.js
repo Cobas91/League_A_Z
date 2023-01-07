@@ -22,4 +22,12 @@ const API_handlePasswordReset = (credentials) => {
         .catch(err => toast.error("Etwas ist schiefgelaufen..."))
 }
 
-export {API_handleLogin, API_handleRegister, API_handlePasswordReset}
+
+const API_changePasswordWithToken = (credentials) => {
+    return axios
+        .post('/auth/password/change/token', credentials)
+        .then(res => res)
+        .catch(err => toast.error("Etwas ist schiefgelaufen..."))
+}
+
+export {API_handleLogin, API_handleRegister, API_handlePasswordReset, API_changePasswordWithToken}

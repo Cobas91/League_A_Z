@@ -4,10 +4,10 @@ import {useTranslation} from "react-i18next";
 
 export default function LanguageSelector() {
     const [t, i18n] = useTranslation();
-    const changeLanguageDE = ()=>{
+    const changeLanguageDE = () => {
         i18n.changeLanguage("de")
     }
-    const changeLanguageEN = ()=>{
+    const changeLanguageEN = () => {
         i18n.changeLanguage("en")
     }
     return (

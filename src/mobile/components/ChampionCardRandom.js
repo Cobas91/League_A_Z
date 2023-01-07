@@ -5,7 +5,7 @@ import {AiOutlineReload} from "react-icons/ai";
 
 export default function ChampionCardRandom({champ, getRandomChamp}) {
 
-    const handleReload = ()=>{
+    const handleReload = () => {
         getRandomChamp()
     }
 

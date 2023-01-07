@@ -1,5 +1,5 @@
 import * as React from 'react';
-import {useEffect, useState} from "react";
+import {useEffect, useState} from 'react';
 import styled from "styled-components/macro";
 import ChampionCardRandom from "../components/ChampionCardRandom";
 import {API_getRandomChamp} from "../../service/ChampionService";
@@ -10,9 +10,9 @@ export default function RandomCard() {
         getRandomChamp()
     }, []);
 
-    const getRandomChamp = ()=>{
-        API_getRandomChamp().then((res)=>{
-            console.log(res.data+"asd")
+    const getRandomChamp = () => {
+        API_getRandomChamp().then((res) => {
+            console.log(res.data + "asd")
             setRandomChamp(res.data)
         })
     }

@@ -4,7 +4,7 @@ import DesktopApp from './DesktopApp';
 import reportWebVitals from './reportWebVitals';
 import {BrowserRouter} from "react-router-dom";
 import AuthProvider from './security/AuthProvider'
-import { isBrowser} from 'react-device-detect';
+import {isBrowser} from 'react-device-detect';
 import MobileApp from "./MobileApp";
 
 ReactDOM.render(

@@ -5,8 +5,6 @@ import lombok.Data;
 
 import java.util.List;
 
-@Data
-@Builder
-public class StatisticDTO {
+@Data @Builder public class StatisticDTO {
 	private List<SummonerStatsDTO> summoners;
 }

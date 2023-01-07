@@ -1,7 +1,7 @@
 {
   "files": {
     "main.css": "/static/css/main.9adaeaf0.css",
-    "main.js": "/static/js/main.f0101296.js",
+    "main.js": "/static/js/main.44a5d859.js",
     "static/js/787.95570022.chunk.js": "/static/js/787.95570022.chunk.js",
     "static/media/background1.mp4": "/static/media/background1.854fa43f087e986198dc.mp4",
     "static/media/background4.mp4": "/static/media/background4.f20966d938d7333e213d.mp4",
@@ -13,11 +13,11 @@
     "static/media/Friz_Quadrata-Bold.otf": "/static/media/Friz_Quadrata-Bold.edba907ef6e3787f4440.otf",
     "index.html": "/index.html",
     "main.9adaeaf0.css.map": "/static/css/main.9adaeaf0.css.map",
-    "main.f0101296.js.map": "/static/js/main.f0101296.js.map",
+    "main.44a5d859.js.map": "/static/js/main.44a5d859.js.map",
     "787.95570022.chunk.js.map": "/static/js/787.95570022.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.9adaeaf0.css",
-    "static/js/main.f0101296.js"
+    "static/js/main.44a5d859.js"
   ]
 }

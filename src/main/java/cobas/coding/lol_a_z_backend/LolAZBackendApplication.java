@@ -7,6 +7,8 @@ import org.springframework.scheduling.annotation.EnableScheduling;
 @SpringBootApplication @EnableScheduling public class LolAZBackendApplication {
 
 	public static void main(String[] args) {
+		//		Jeffrey.initFolderStructure();
+		//		Jeffrey.generateKeyStore();
 		SpringApplication.run(LolAZBackendApplication.class, args);
 	}
 

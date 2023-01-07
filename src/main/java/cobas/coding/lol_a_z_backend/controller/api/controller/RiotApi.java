@@ -14,11 +14,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 @Service @Slf4j public class RiotApi {
-	@Autowired
-	SystemInformationRepository systemInformationRepository;
+	@Autowired SystemInformationRepository systemInformationRepository;
 	RestTemplate restTemplate = new RestTemplate();
 	@Autowired ApplicationContext context;
 
@@ -26,11 +28,13 @@ import java.util.*;
 	 * Fetch a .json file from the Riot API URL.
 	 *
 	 * @return List of Champions
+	 *
 	 * @throws RiotApiGetChampionException
 	 */
 	public List<Champion> getAllChampions() throws RiotApiGetChampionException {
 		String[] version = getVersions();
-		ResponseEntity<RiotApiResponse> response = restTemplate.getForEntity("http://ddragon.leagueoflegends.com/cdn/"+version[0]+"/data/en_US/champion.json", RiotApiResponse.class);
+		ResponseEntity<RiotApiResponse> response = restTemplate.getForEntity("http://ddragon.leagueoflegends.com/cdn/" + version[0] + "/data/en_US/champion.json",
+				RiotApiResponse.class);
 		if (response.getStatusCode() != HttpStatus.OK) {
 			throw new RiotApiGetChampionException("Error while request Champions");
 		}
@@ -43,7 +47,7 @@ import java.util.*;
 		return new ArrayList<>(data);
 	}
 
-	public void saveSystemStatus(int dataSize, String version){
+	public void saveSystemStatus(int dataSize, String version) {
 		SystemInformation systemInformation = SystemInformation.builder().champCount(dataSize).champVersion(version).build();
 		systemInformationRepository.save(systemInformation);
 	}
@@ -54,7 +58,7 @@ import java.util.*;
 			throw new RiotApiGetChampionException("Error while request Champions");
 		}
 		String[] versions = response.getBody();
-		log.info("League of Legends version: "+versions[0]);
+		log.info("League of Legends version: " + versions[0]);
 		return versions;
 	}
 }

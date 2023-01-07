@@ -1,6 +1,5 @@
 package cobas.coding.lol_a_z_backend.model;
 
-import cobas.coding.lol_a_z_backend.security.model.Summoner;
 import lombok.*;
 import org.hibernate.Hibernate;
 

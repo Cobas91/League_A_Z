@@ -12,7 +12,10 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service @Slf4j public class ChampionService {
@@ -27,7 +30,6 @@ import java.util.stream.Collectors;
 		this.userRepo = repositoryProvider.getSummonerRepo();
 		this.initialChampionService = initialChampionService;
 	}
-
 
 	private Summoner getSummoner() {
 		String username = SecurityContextHolder.getContext().getAuthentication().getPrincipal().toString();
@@ -81,13 +83,14 @@ import java.util.stream.Collectors;
 		return summoner.getChampions();
 	}
 
-	public List<SummonerStatsDTO> getChampionStats(){
+	public List<SummonerStatsDTO> getChampionStats() {
 		List<Summoner> summoners = userRepo.findAll();
 		List<SummonerStatsDTO> statistics = new ArrayList<>();
-		for(Summoner summoner : summoners ){
+		for (Summoner summoner : summoners) {
 			List<Champion> summonerChamps = summoner.getChampions();
-			for(Champion champ: summonerChamps){
-				statistics.add(SummonerStatsDTO.builder().championName(champ.getName()).summonerName(summoner.getUsername()).played(champ.isPlayed()).wins(champ.getWins()).looses(champ.getLoose()).build());
+			for (Champion champ : summonerChamps) {
+				statistics.add(SummonerStatsDTO.builder().championName(champ.getName()).summonerName(summoner.getUsername()).played(champ.isPlayed()).wins(champ.getWins())
+						.looses(champ.getLoose()).build());
 			}
 		}
 		return statistics;
@@ -99,7 +102,7 @@ import java.util.stream.Collectors;
 		List<Champion> oldChamps = summoner.getChampions();
 		List<Champion> champsToAdd = new ArrayList<>();
 		for (Champion newChamp : newChamps) {
-			if(!oldChamps.contains(newChamp)){
+			if (!oldChamps.contains(newChamp)) {
 				champsToAdd.add(newChamp);
 			}
 		}

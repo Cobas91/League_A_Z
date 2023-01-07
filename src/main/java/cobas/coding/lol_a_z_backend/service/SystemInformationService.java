@@ -5,14 +5,10 @@ import cobas.coding.lol_a_z_backend.repository.SystemInformationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.Optional;
+@Service public class SystemInformationService {
+	@Autowired private SystemInformationRepository systemInformationRepository;
 
-@Service
-public class SystemInformationService {
-	@Autowired
-	private SystemInformationRepository systemInformationRepository;
-
-	public SystemInformation addInformation(SystemInformation systemInformation){
+	public SystemInformation addInformation(SystemInformation systemInformation) {
 		return systemInformationRepository.save(systemInformation);
 	}
 

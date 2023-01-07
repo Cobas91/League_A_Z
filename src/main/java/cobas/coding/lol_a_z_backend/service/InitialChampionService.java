@@ -1,7 +1,7 @@
 package cobas.coding.lol_a_z_backend.service;
 
-import cobas.coding.lol_a_z_backend.model.Champion;
 import cobas.coding.lol_a_z_backend.controller.api.service.RiotApiService;
+import cobas.coding.lol_a_z_backend.model.Champion;
 import cobas.coding.lol_a_z_backend.model.SystemInformation;
 import cobas.coding.lol_a_z_backend.util.FileSystemUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -24,7 +24,9 @@ import java.net.URL;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
 
 @Service @Slf4j public class InitialChampionService {
 	@Autowired private SystemInformationService systemInformationService;
@@ -57,15 +59,14 @@ import java.util.*;
 	}
 
 	private void checkForNewChampions() {
-		if(!Files.exists(this.champDirectoryPath)){
+		if (!Files.exists(this.champDirectoryPath)) {
 			FileSystemUtil.createDirectory(champDirectoryPath.toString());
 			FileSystemUtil.createDirectory(this.versionDirectory.toString());
 			startWorker();
-		}else if(!Files.exists(this.versionDirectory)){
+		} else if (!Files.exists(this.versionDirectory)) {
 			FileSystemUtil.createDirectory(this.versionDirectory.toString());
 			startWorker();
-		}
-		else{
+		} else {
 			this.currentVersion = riotApiService.getLatestVersion();
 			systemInformationService.addInformation(SystemInformation.builder().champCount(0).champVersion(this.currentVersion).build());
 		}

@@ -3,10 +3,8 @@ package cobas.coding.lol_a_z_backend.config;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
-@Controller
-public class ReactRoutingForward {
-	@RequestMapping("/**/{[path:[^\\.]*}")
-	public String forwardToOurUrl(){
+@Controller public class ReactRoutingForward {
+	@RequestMapping("/**/{[path:[^\\.]*}") public String forwardToOurUrl() {
 		return "forward:/";
 	}
 }

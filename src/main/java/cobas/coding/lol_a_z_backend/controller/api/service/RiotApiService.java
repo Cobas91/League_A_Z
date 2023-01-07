@@ -4,7 +4,6 @@ import cobas.coding.lol_a_z_backend.controller.api.controller.RiotApi;
 import cobas.coding.lol_a_z_backend.controller.api.exception.RiotApiGetChampionException;
 import cobas.coding.lol_a_z_backend.controller.api.model.RiotApiResponse;
 import cobas.coding.lol_a_z_backend.model.Champion;
-import cobas.coding.lol_a_z_backend.repository.SystemInformationRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.ApplicationContext;
 import org.springframework.stereotype.Service;
@@ -23,6 +22,7 @@ import java.util.List;
 	 * Fetch a list of Champions from the Riot API. No API Key needed for this fetch.
 	 *
 	 * @return List of Champions without icon Data.
+	 *
 	 * @see RiotApiResponse
 	 */
 	public List<Champion> getChampionsFromApi() {
@@ -34,7 +34,7 @@ import java.util.List;
 		return List.of();
 	}
 
-	public String getLatestVersion(){
+	public String getLatestVersion() {
 		try {
 			String[] versions = riotApi.getVersions();
 			return versions[0];

@@ -5,13 +5,8 @@ import lombok.Getter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-@Service
-@Getter
-public class RepositoryProvider {
-	@Autowired
-	ChampionRepo championRepo;
-	@Autowired
-	SystemInformationRepository systemInformationRepository;
-	@Autowired
-	SummonerRepo summonerRepo;
+@Service @Getter public class RepositoryProvider {
+	@Autowired ChampionRepo championRepo;
+	@Autowired SystemInformationRepository systemInformationRepository;
+	@Autowired SummonerRepo summonerRepo;
 }

@@ -1,15 +1,14 @@
 package cobas.coding.lol_a_z_backend.util;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.stereotype.Service;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.stream.Stream;
-@Slf4j
-public class FileSystemUtil {
+
+@Slf4j public class FileSystemUtil {
 
 	public static boolean directoryIsEmpty(Path path) {
 		try {
@@ -17,12 +16,12 @@ public class FileSystemUtil {
 				try (Stream<Path> entries = Files.list(path)) {
 					return entries.findFirst().isEmpty();
 				}
-			}else if(!Files.exists(path)){
+			} else if (!Files.exists(path)) {
 				return true;
 			}
 			return false;
 		} catch (IOException e) {
-			log.error(e.getMessage(),e);
+			log.error(e.getMessage(), e);
 			return false;
 		}
 	}
